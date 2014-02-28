@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinClient", "TestDb\WinClient.csproj", "{E181603A-CF5D-40EA-B77E-A0000C10BE0F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinClient", "WinClient\WinClient.csproj", "{E181603A-CF5D-40EA-B77E-A0000C10BE0F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Db", "Db\Db.csproj", "{19B991D7-208A-4058-B287-9D4193E0ACFF}"
 EndProject
