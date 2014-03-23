@@ -1,3 +1,13 @@
+// 
+//  ____  _     __  __      _        _ 
+// |  _ \| |__ |  \/  | ___| |_ __ _| |
+// | | | | '_ \| |\/| |/ _ \ __/ _` | |
+// | |_| | |_) | |  | |  __/ || (_| | |
+// |____/|_.__/|_|  |_|\___|\__\__,_|_|
+//
+// Auto-generated from car_rental on 2014-03-23 15:51:36Z.
+// Please visit http://code.google.com/p/dblinq2007/ for more information.
+//
 using System;
 using System.ComponentModel;
 using System.Data;
@@ -11,7 +21,7 @@ using System.Data.Linq.Mapping;
 using System.Diagnostics;
 
 
-public partial class Test : DataContext
+public partial class CarRental : DataContext
 {
 
     #region Extensibility Method Declarations
@@ -19,45 +29,93 @@ public partial class Test : DataContext
     #endregion
 
 
-    public Test(string connectionString) :
+    public CarRental(string connectionString) :
         base(connectionString)
     {
         this.OnCreated();
     }
 
-    public Test(string connection, MappingSource mappingSource) :
+    public CarRental(string connection, MappingSource mappingSource) :
         base(connection, mappingSource)
     {
         this.OnCreated();
     }
 
-    public Test(IDbConnection connection, MappingSource mappingSource) :
+    public CarRental(IDbConnection connection, MappingSource mappingSource) :
         base(connection, mappingSource)
     {
         this.OnCreated();
     }
 
-    public Table<Autos> Autos
+    public Table<Cars> Cars
     {
         get
         {
-            return this.GetTable<Autos>();
+            return this.GetTable<Cars>();
         }
     }
 
-    public Table<Orders> Orders
+    public Table<Clients> Clients
     {
         get
         {
-            return this.GetTable<Orders>();
+            return this.GetTable<Clients>();
         }
     }
 
-    public Table<Users> Users
+    public Table<Payments> Payments
     {
         get
         {
-            return this.GetTable<Users>();
+            return this.GetTable<Payments>();
+        }
+    }
+
+    public Table<Penalties> Penalties
+    {
+        get
+        {
+            return this.GetTable<Penalties>();
+        }
+    }
+
+    public Table<Preferences> Preferences
+    {
+        get
+        {
+            return this.GetTable<Preferences>();
+        }
+    }
+
+    public Table<Properties> Properties
+    {
+        get
+        {
+            return this.GetTable<Properties>();
+        }
+    }
+
+    public Table<Property2car> Property2car
+    {
+        get
+        {
+            return this.GetTable<Property2car>();
+        }
+    }
+
+    public Table<Property2preference> Property2preference
+    {
+        get
+        {
+            return this.GetTable<Property2preference>();
+        }
+    }
+
+    public Table<Rents> Rents
+    {
+        get
+        {
+            return this.GetTable<Rents>();
         }
     }
 }
@@ -65,10 +123,10 @@ public partial class Test : DataContext
 #region Start MONO_STRICT
 #if MONO_STRICT
 
-public partial class Test
+public partial class CarRental
 {
 	
-	public Test(IDbConnection connection) : 
+	public CarRental(IDbConnection connection) : 
 			base(connection)
 	{
 		this.OnCreated();
@@ -78,22 +136,22 @@ public partial class Test
 #endregion
 #else     // MONO_STRICT
 
-public partial class Test
+public partial class CarRental
 {
 
-    public Test(IDbConnection connection) :
+    public CarRental(IDbConnection connection) :
         base(connection, new DbLinq.PostgreSql.PgsqlVendor())
     {
         this.OnCreated();
     }
 
-    public Test(IDbConnection connection, IVendor sqlDialect) :
+    public CarRental(IDbConnection connection, IVendor sqlDialect) :
         base(connection, sqlDialect)
     {
         this.OnCreated();
     }
 
-    public Test(IDbConnection connection, MappingSource mappingSource, IVendor sqlDialect) :
+    public CarRental(IDbConnection connection, MappingSource mappingSource, IVendor sqlDialect) :
         base(connection, mappingSource, sqlDialect)
     {
         this.OnCreated();
@@ -104,57 +162,558 @@ public partial class Test
 #endif     // MONO_STRICT
 #endregion
 
-[Table(Name = "public.autos")]
-public partial class Autos : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+[Table(Name = "public.cars")]
+public partial class Cars : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 {
 
     private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
 
-    private int _autoID;
+    private int _carID;
 
-    private int _type;
+    private string _brand;
 
-    private string _description;
+    private decimal _cost;
+
+    private decimal _dailyCost;
 
     #region Extensibility Method Declarations
     partial void OnCreated();
 
-    partial void OnAutoIDChanged();
+    partial void OnCarIDChanged();
 
-    partial void OnAutoIDChanging(int value);
+    partial void OnCarIDChanging(int value);
+
+    partial void OnBrandChanged();
+
+    partial void OnBrandChanging(string value);
+
+    partial void OnCostChanged();
+
+    partial void OnCostChanging(decimal value);
+
+    partial void OnDailyCostChanged();
+
+    partial void OnDailyCostChanging(decimal value);
+    #endregion
+
+
+    public Cars()
+    {
+        this.OnCreated();
+    }
+
+    [Column(Storage = "_carID", Name = "car_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'car_id_seq\')")]
+    [DebuggerNonUserCode()]
+    public int CarID
+    {
+        get
+        {
+            return this._carID;
+        }
+        set
+        {
+            if ((_carID != value))
+            {
+                this.OnCarIDChanging(value);
+                this.SendPropertyChanging();
+                this._carID = value;
+                this.SendPropertyChanged("CarID");
+                this.OnCarIDChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_brand", Name = "brand", DbType = "character varying(40)", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public string Brand
+    {
+        get
+        {
+            return this._brand;
+        }
+        set
+        {
+            if (((_brand == value)
+                        == false))
+            {
+                this.OnBrandChanging(value);
+                this.SendPropertyChanging();
+                this._brand = value;
+                this.SendPropertyChanged("Brand");
+                this.OnBrandChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_cost", Name = "cost", DbType = "money", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public decimal Cost
+    {
+        get
+        {
+            return this._cost;
+        }
+        set
+        {
+            if ((_cost != value))
+            {
+                this.OnCostChanging(value);
+                this.SendPropertyChanging();
+                this._cost = value;
+                this.SendPropertyChanged("Cost");
+                this.OnCostChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_dailyCost", Name = "daily_cost", DbType = "money", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public decimal DailyCost
+    {
+        get
+        {
+            return this._dailyCost;
+        }
+        set
+        {
+            if ((_dailyCost != value))
+            {
+                this.OnDailyCostChanging(value);
+                this.SendPropertyChanging();
+                this._dailyCost = value;
+                this.SendPropertyChanged("DailyCost");
+                this.OnDailyCostChanged();
+            }
+        }
+    }
+
+    public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+
+    public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void SendPropertyChanging()
+    {
+        System.ComponentModel.PropertyChangingEventHandler h = this.PropertyChanging;
+        if ((h != null))
+        {
+            h(this, emptyChangingEventArgs);
+        }
+    }
+
+    protected virtual void SendPropertyChanged(string propertyName)
+    {
+        System.ComponentModel.PropertyChangedEventHandler h = this.PropertyChanged;
+        if ((h != null))
+        {
+            h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+        }
+    }
+}
+
+[Table(Name = "public.clients")]
+public partial class Clients : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+{
+
+    private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
+
+    private int _clientID;
+
+    private string _name;
+
+    private string _lastname;
+
+    private string _middlename;
+
+    private string _passportData;
+
+    private string _telephone;
+
+    private System.Nullable<double> _discount;
+
+    #region Extensibility Method Declarations
+    partial void OnCreated();
+
+    partial void OnClientIDChanged();
+
+    partial void OnClientIDChanging(int value);
+
+    partial void OnNameChanged();
+
+    partial void OnNameChanging(string value);
+
+    partial void OnLastnameChanged();
+
+    partial void OnLastnameChanging(string value);
+
+    partial void OnMiddlenameChanged();
+
+    partial void OnMiddlenameChanging(string value);
+
+    partial void OnPassportDataChanged();
+
+    partial void OnPassportDataChanging(string value);
+
+    partial void OnTelephoneChanged();
+
+    partial void OnTelephoneChanging(string value);
+
+    partial void OnDiscountChanged();
+
+    partial void OnDiscountChanging(System.Nullable<double> value);
+    #endregion
+
+
+    public Clients()
+    {
+        this.OnCreated();
+    }
+
+    [Column(Storage = "_clientID", Name = "client_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'client_id_seq\')")]
+    [DebuggerNonUserCode()]
+    public int ClientID
+    {
+        get
+        {
+            return this._clientID;
+        }
+        set
+        {
+            if ((_clientID != value))
+            {
+                this.OnClientIDChanging(value);
+                this.SendPropertyChanging();
+                this._clientID = value;
+                this.SendPropertyChanged("ClientID");
+                this.OnClientIDChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_name", Name = "name", DbType = "character varying(30)", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public string Name
+    {
+        get
+        {
+            return this._name;
+        }
+        set
+        {
+            if (((_name == value)
+                        == false))
+            {
+                this.OnNameChanging(value);
+                this.SendPropertyChanging();
+                this._name = value;
+                this.SendPropertyChanged("Name");
+                this.OnNameChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_lastname", Name = "lastname", DbType = "character varying(30)", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public string Lastname
+    {
+        get
+        {
+            return this._lastname;
+        }
+        set
+        {
+            if (((_lastname == value)
+                        == false))
+            {
+                this.OnLastnameChanging(value);
+                this.SendPropertyChanging();
+                this._lastname = value;
+                this.SendPropertyChanged("Lastname");
+                this.OnLastnameChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_middlename", Name = "middlename", DbType = "character varying(30)", AutoSync = AutoSync.Never)]
+    [DebuggerNonUserCode()]
+    public string Middlename
+    {
+        get
+        {
+            return this._middlename;
+        }
+        set
+        {
+            if (((_middlename == value)
+                        == false))
+            {
+                this.OnMiddlenameChanging(value);
+                this.SendPropertyChanging();
+                this._middlename = value;
+                this.SendPropertyChanged("Middlename");
+                this.OnMiddlenameChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_passportData", Name = "passport_data", DbType = "character varying(150)", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public string PassportData
+    {
+        get
+        {
+            return this._passportData;
+        }
+        set
+        {
+            if (((_passportData == value)
+                        == false))
+            {
+                this.OnPassportDataChanging(value);
+                this.SendPropertyChanging();
+                this._passportData = value;
+                this.SendPropertyChanged("PassportData");
+                this.OnPassportDataChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_telephone", Name = "telephone", DbType = "character varying(20)", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public string Telephone
+    {
+        get
+        {
+            return this._telephone;
+        }
+        set
+        {
+            if (((_telephone == value)
+                        == false))
+            {
+                this.OnTelephoneChanging(value);
+                this.SendPropertyChanging();
+                this._telephone = value;
+                this.SendPropertyChanged("Telephone");
+                this.OnTelephoneChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_discount", Name = "discount", DbType = "double precision", AutoSync = AutoSync.Never)]
+    [DebuggerNonUserCode()]
+    public System.Nullable<double> Discount
+    {
+        get
+        {
+            return this._discount;
+        }
+        set
+        {
+            if ((_discount != value))
+            {
+                this.OnDiscountChanging(value);
+                this.SendPropertyChanging();
+                this._discount = value;
+                this.SendPropertyChanged("Discount");
+                this.OnDiscountChanged();
+            }
+        }
+    }
+
+    public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+
+    public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void SendPropertyChanging()
+    {
+        System.ComponentModel.PropertyChangingEventHandler h = this.PropertyChanging;
+        if ((h != null))
+        {
+            h(this, emptyChangingEventArgs);
+        }
+    }
+
+    protected virtual void SendPropertyChanged(string propertyName)
+    {
+        System.ComponentModel.PropertyChangedEventHandler h = this.PropertyChanged;
+        if ((h != null))
+        {
+            h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+        }
+    }
+}
+
+[Table(Name = "public.payments")]
+public partial class Payments : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+{
+
+    private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
+
+    private int _rentID;
+
+    private System.Nullable<int> _penaltyID;
+
+    private decimal _totalCost;
+
+    #region Extensibility Method Declarations
+    partial void OnCreated();
+
+    partial void OnRentIDChanged();
+
+    partial void OnRentIDChanging(int value);
+
+    partial void OnPenaltyIDChanged();
+
+    partial void OnPenaltyIDChanging(System.Nullable<int> value);
+
+    partial void OnTotalCostChanged();
+
+    partial void OnTotalCostChanging(decimal value);
+    #endregion
+
+
+    public Payments()
+    {
+        this.OnCreated();
+    }
+
+    [Column(Storage = "_rentID", Name = "rent_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'rent_id_seq\')")]
+    [DebuggerNonUserCode()]
+    public int RentID
+    {
+        get
+        {
+            return this._rentID;
+        }
+        set
+        {
+            if ((_rentID != value))
+            {
+                this.OnRentIDChanging(value);
+                this.SendPropertyChanging();
+                this._rentID = value;
+                this.SendPropertyChanged("RentID");
+                this.OnRentIDChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_penaltyID", Name = "penalty_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never)]
+    [DebuggerNonUserCode()]
+    public System.Nullable<int> PenaltyID
+    {
+        get
+        {
+            return this._penaltyID;
+        }
+        set
+        {
+            if ((_penaltyID != value))
+            {
+                this.OnPenaltyIDChanging(value);
+                this.SendPropertyChanging();
+                this._penaltyID = value;
+                this.SendPropertyChanged("PenaltyID");
+                this.OnPenaltyIDChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_totalCost", Name = "total_cost", DbType = "money", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public decimal TotalCost
+    {
+        get
+        {
+            return this._totalCost;
+        }
+        set
+        {
+            if ((_totalCost != value))
+            {
+                this.OnTotalCostChanging(value);
+                this.SendPropertyChanging();
+                this._totalCost = value;
+                this.SendPropertyChanged("TotalCost");
+                this.OnTotalCostChanged();
+            }
+        }
+    }
+
+    public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+
+    public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void SendPropertyChanging()
+    {
+        System.ComponentModel.PropertyChangingEventHandler h = this.PropertyChanging;
+        if ((h != null))
+        {
+            h(this, emptyChangingEventArgs);
+        }
+    }
+
+    protected virtual void SendPropertyChanged(string propertyName)
+    {
+        System.ComponentModel.PropertyChangedEventHandler h = this.PropertyChanged;
+        if ((h != null))
+        {
+            h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+        }
+    }
+}
+
+[Table(Name = "public.penalties")]
+public partial class Penalties : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+{
+
+    private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
+
+    private int _penaltyID;
+
+    private int _type;
+
+    private decimal _sum;
+
+    #region Extensibility Method Declarations
+    partial void OnCreated();
+
+    partial void OnPenaltyIDChanged();
+
+    partial void OnPenaltyIDChanging(int value);
 
     partial void OnTypeChanged();
 
     partial void OnTypeChanging(int value);
 
-    partial void OnDescriptionChanged();
+    partial void OnSumChanged();
 
-    partial void OnDescriptionChanging(string value);
+    partial void OnSumChanging(decimal value);
     #endregion
 
 
-    public Autos()
+    public Penalties()
     {
         this.OnCreated();
     }
 
-    [Column(Storage = "_autoID", Name = "auto_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'auto_id_seq\')")]
+    [Column(Storage = "_penaltyID", Name = "penalty_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'penalty_id_seq\')")]
     [DebuggerNonUserCode()]
-    public int AutoID
+    public int PenaltyID
     {
         get
         {
-            return this._autoID;
+            return this._penaltyID;
         }
         set
         {
-            if ((_autoID != value))
+            if ((_penaltyID != value))
             {
-                this.OnAutoIDChanging(value);
+                this.OnPenaltyIDChanging(value);
                 this.SendPropertyChanging();
-                this._autoID = value;
-                this.SendPropertyChanged("AutoID");
-                this.OnAutoIDChanged();
+                this._penaltyID = value;
+                this.SendPropertyChanged("PenaltyID");
+                this.OnPenaltyIDChanged();
             }
         }
     }
@@ -176,6 +735,301 @@ public partial class Autos : System.ComponentModel.INotifyPropertyChanging, Syst
                 this._type = value;
                 this.SendPropertyChanged("Type");
                 this.OnTypeChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_sum", Name = "sum", DbType = "money", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public decimal Sum
+    {
+        get
+        {
+            return this._sum;
+        }
+        set
+        {
+            if ((_sum != value))
+            {
+                this.OnSumChanging(value);
+                this.SendPropertyChanging();
+                this._sum = value;
+                this.SendPropertyChanged("Sum");
+                this.OnSumChanged();
+            }
+        }
+    }
+
+    public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+
+    public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void SendPropertyChanging()
+    {
+        System.ComponentModel.PropertyChangingEventHandler h = this.PropertyChanging;
+        if ((h != null))
+        {
+            h(this, emptyChangingEventArgs);
+        }
+    }
+
+    protected virtual void SendPropertyChanged(string propertyName)
+    {
+        System.ComponentModel.PropertyChangedEventHandler h = this.PropertyChanged;
+        if ((h != null))
+        {
+            h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+        }
+    }
+}
+
+[Table(Name = "public.preferences")]
+public partial class Preferences : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+{
+
+    private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
+
+    private int _preferenceID;
+
+    private System.DateTime _rentStart;
+
+    private System.DateTime _rentStop;
+
+    private int _clientID;
+
+    private string _brand;
+
+    private decimal _maxDailyCost;
+
+    #region Extensibility Method Declarations
+    partial void OnCreated();
+
+    partial void OnPreferenceIDChanged();
+
+    partial void OnPreferenceIDChanging(int value);
+
+    partial void OnRentStartChanged();
+
+    partial void OnRentStartChanging(System.DateTime value);
+
+    partial void OnRentStopChanged();
+
+    partial void OnRentStopChanging(System.DateTime value);
+
+    partial void OnClientIDChanged();
+
+    partial void OnClientIDChanging(int value);
+
+    partial void OnBrandChanged();
+
+    partial void OnBrandChanging(string value);
+
+    partial void OnMaxDailyCostChanged();
+
+    partial void OnMaxDailyCostChanging(decimal value);
+    #endregion
+
+
+    public Preferences()
+    {
+        this.OnCreated();
+    }
+
+    [Column(Storage = "_preferenceID", Name = "preference_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'preference_id_seq\')")]
+    [DebuggerNonUserCode()]
+    public int PreferenceID
+    {
+        get
+        {
+            return this._preferenceID;
+        }
+        set
+        {
+            if ((_preferenceID != value))
+            {
+                this.OnPreferenceIDChanging(value);
+                this.SendPropertyChanging();
+                this._preferenceID = value;
+                this.SendPropertyChanged("PreferenceID");
+                this.OnPreferenceIDChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_rentStart", Name = "rent_start", DbType = "timestamp without time zone", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public System.DateTime RentStart
+    {
+        get
+        {
+            return this._rentStart;
+        }
+        set
+        {
+            if ((_rentStart != value))
+            {
+                this.OnRentStartChanging(value);
+                this.SendPropertyChanging();
+                this._rentStart = value;
+                this.SendPropertyChanged("RentStart");
+                this.OnRentStartChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_rentStop", Name = "rent_stop", DbType = "timestamp without time zone", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public System.DateTime RentStop
+    {
+        get
+        {
+            return this._rentStop;
+        }
+        set
+        {
+            if ((_rentStop != value))
+            {
+                this.OnRentStopChanging(value);
+                this.SendPropertyChanging();
+                this._rentStop = value;
+                this.SendPropertyChanged("RentStop");
+                this.OnRentStopChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_clientID", Name = "client_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public int ClientID
+    {
+        get
+        {
+            return this._clientID;
+        }
+        set
+        {
+            if ((_clientID != value))
+            {
+                this.OnClientIDChanging(value);
+                this.SendPropertyChanging();
+                this._clientID = value;
+                this.SendPropertyChanged("ClientID");
+                this.OnClientIDChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_brand", Name = "brand", DbType = "character varying(30)", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public string Brand
+    {
+        get
+        {
+            return this._brand;
+        }
+        set
+        {
+            if (((_brand == value)
+                        == false))
+            {
+                this.OnBrandChanging(value);
+                this.SendPropertyChanging();
+                this._brand = value;
+                this.SendPropertyChanged("Brand");
+                this.OnBrandChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_maxDailyCost", Name = "max_daily_cost", DbType = "money", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public decimal MaxDailyCost
+    {
+        get
+        {
+            return this._maxDailyCost;
+        }
+        set
+        {
+            if ((_maxDailyCost != value))
+            {
+                this.OnMaxDailyCostChanging(value);
+                this.SendPropertyChanging();
+                this._maxDailyCost = value;
+                this.SendPropertyChanged("MaxDailyCost");
+                this.OnMaxDailyCostChanged();
+            }
+        }
+    }
+
+    public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+
+    public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void SendPropertyChanging()
+    {
+        System.ComponentModel.PropertyChangingEventHandler h = this.PropertyChanging;
+        if ((h != null))
+        {
+            h(this, emptyChangingEventArgs);
+        }
+    }
+
+    protected virtual void SendPropertyChanged(string propertyName)
+    {
+        System.ComponentModel.PropertyChangedEventHandler h = this.PropertyChanged;
+        if ((h != null))
+        {
+            h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+        }
+    }
+}
+
+[Table(Name = "public.properties")]
+public partial class Properties : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+{
+
+    private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
+
+    private int _propertyID;
+
+    private string _description;
+
+    #region Extensibility Method Declarations
+    partial void OnCreated();
+
+    partial void OnPropertyIDChanged();
+
+    partial void OnPropertyIDChanging(int value);
+
+    partial void OnDescriptionChanged();
+
+    partial void OnDescriptionChanging(string value);
+    #endregion
+
+
+    public Properties()
+    {
+        this.OnCreated();
+    }
+
+    [Column(Storage = "_propertyID", Name = "property_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'property_id_seq\')")]
+    [DebuggerNonUserCode()]
+    public int PropertyID
+    {
+        get
+        {
+            return this._propertyID;
+        }
+        set
+        {
+            if ((_propertyID != value))
+            {
+                this.OnPropertyIDChanging(value);
+                this.SendPropertyChanging();
+                this._propertyID = value;
+                this.SendPropertyChanged("PropertyID");
+                this.OnPropertyIDChanged();
             }
         }
     }
@@ -225,181 +1079,72 @@ public partial class Autos : System.ComponentModel.INotifyPropertyChanging, Syst
     }
 }
 
-[Table(Name = "public.orders")]
-public partial class Orders : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+[Table(Name = "public.property2car")]
+public partial class Property2car : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 {
 
     private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
 
-    private int _orderID;
+    private int _propertyID;
 
-    private int _userID;
-
-    private int _autoID;
-
-    private string _description;
-
-    private System.DateTime _startTime;
-
-    private System.DateTime _stopTime;
+    private int _carID;
 
     #region Extensibility Method Declarations
     partial void OnCreated();
 
-    partial void OnOrderIDChanged();
+    partial void OnPropertyIDChanged();
 
-    partial void OnOrderIDChanging(int value);
+    partial void OnPropertyIDChanging(int value);
 
-    partial void OnUserIDChanged();
+    partial void OnCarIDChanged();
 
-    partial void OnUserIDChanging(int value);
-
-    partial void OnAutoIDChanged();
-
-    partial void OnAutoIDChanging(int value);
-
-    partial void OnDescriptionChanged();
-
-    partial void OnDescriptionChanging(string value);
-
-    partial void OnStartTimeChanged();
-
-    partial void OnStartTimeChanging(System.DateTime value);
-
-    partial void OnStopTimeChanged();
-
-    partial void OnStopTimeChanging(System.DateTime value);
+    partial void OnCarIDChanging(int value);
     #endregion
 
 
-    public Orders()
+    public Property2car()
     {
         this.OnCreated();
     }
 
-    [Column(Storage = "_orderID", Name = "order_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'order_id_seq\')")]
+    [Column(Storage = "_propertyID", Name = "property_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'property_id_seq\')")]
     [DebuggerNonUserCode()]
-    public int OrderID
+    public int PropertyID
     {
         get
         {
-            return this._orderID;
+            return this._propertyID;
         }
         set
         {
-            if ((_orderID != value))
+            if ((_propertyID != value))
             {
-                this.OnOrderIDChanging(value);
+                this.OnPropertyIDChanging(value);
                 this.SendPropertyChanging();
-                this._orderID = value;
-                this.SendPropertyChanged("OrderID");
-                this.OnOrderIDChanged();
+                this._propertyID = value;
+                this.SendPropertyChanged("PropertyID");
+                this.OnPropertyIDChanged();
             }
         }
     }
 
-    [Column(Storage = "_userID", Name = "user_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [Column(Storage = "_carID", Name = "car_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
     [DebuggerNonUserCode()]
-    public int UserID
+    public int CarID
     {
         get
         {
-            return this._userID;
+            return this._carID;
         }
         set
         {
-            if ((_userID != value))
+            if ((_carID != value))
             {
-                this.OnUserIDChanging(value);
+                this.OnCarIDChanging(value);
                 this.SendPropertyChanging();
-                this._userID = value;
-                this.SendPropertyChanged("UserID");
-                this.OnUserIDChanged();
-            }
-        }
-    }
-
-    [Column(Storage = "_autoID", Name = "auto_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
-    [DebuggerNonUserCode()]
-    public int AutoID
-    {
-        get
-        {
-            return this._autoID;
-        }
-        set
-        {
-            if ((_autoID != value))
-            {
-                this.OnAutoIDChanging(value);
-                this.SendPropertyChanging();
-                this._autoID = value;
-                this.SendPropertyChanged("AutoID");
-                this.OnAutoIDChanged();
-            }
-        }
-    }
-
-    [Column(Storage = "_description", Name = "description", DbType = "character varying(200)", AutoSync = AutoSync.Never, CanBeNull = false)]
-    [DebuggerNonUserCode()]
-    public string Description
-    {
-        get
-        {
-            return this._description;
-        }
-        set
-        {
-            if (((_description == value)
-                        == false))
-            {
-                this.OnDescriptionChanging(value);
-                this.SendPropertyChanging();
-                this._description = value;
-                this.SendPropertyChanged("Description");
-                this.OnDescriptionChanged();
-            }
-        }
-    }
-
-    [Column(Storage = "_startTime", Name = "start_time", DbType = "time without time zone", AutoSync = AutoSync.Never, CanBeNull = false)]
-    [DebuggerNonUserCode()]
-    public System.DateTime StartTime
-    {
-        get
-        {
-            return this._startTime;
-        }
-        set
-        {
-            if ((_startTime != value))
-            {
-                this.OnStartTimeChanging(value);
-                this.SendPropertyChanging();
-                this._startTime = value;
-                this.SendPropertyChanged("StartTime");
-                this.OnStartTimeChanged();
-            }
-        }
-    }
-
-    [Column(Storage = "_stopTime", Name = "stop_time", DbType = "time without time zone", AutoSync = AutoSync.Never, CanBeNull = false)]
-    [DebuggerNonUserCode()]
-    public System.DateTime StopTime
-    {
-        get
-        {
-            return this._stopTime;
-        }
-        set
-        {
-            if ((_stopTime != value))
-            {
-                this.OnStopTimeChanging(value);
-                this.SendPropertyChanging();
-                this._stopTime = value;
-                this.SendPropertyChanged("StopTime");
-                this.OnStopTimeChanged();
+                this._carID = value;
+                this.SendPropertyChanged("CarID");
+                this.OnCarIDChanged();
             }
         }
     }
@@ -427,128 +1172,273 @@ public partial class Orders : System.ComponentModel.INotifyPropertyChanging, Sys
     }
 }
 
-[Table(Name = "public.users")]
-public partial class Users : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+[Table(Name = "public.property2preference")]
+public partial class Property2preference : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 {
 
     private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
 
-    private int _userID;
+    private int _prorertyID;
 
-    private System.Nullable<int> _groupID;
-
-    private string _username;
-
-    private string _hash;
+    private int _preferenceID;
 
     #region Extensibility Method Declarations
     partial void OnCreated();
 
-    partial void OnUserIDChanged();
+    partial void OnProrertyIDChanged();
 
-    partial void OnUserIDChanging(int value);
+    partial void OnProrertyIDChanging(int value);
 
-    partial void OnGroupIDChanged();
+    partial void OnPreferenceIDChanged();
 
-    partial void OnGroupIDChanging(System.Nullable<int> value);
-
-    partial void OnUsernameChanged();
-
-    partial void OnUsernameChanging(string value);
-
-    partial void OnHashChanged();
-
-    partial void OnHashChanging(string value);
+    partial void OnPreferenceIDChanging(int value);
     #endregion
 
 
-    public Users()
+    public Property2preference()
     {
         this.OnCreated();
     }
 
-    [Column(Storage = "_userID", Name = "user_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'user_id_seq\')")]
+    [Column(Storage = "_prorertyID", Name = "prorerty_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'prorerty_id_seq\')")]
     [DebuggerNonUserCode()]
-    public int UserID
+    public int ProrertyID
     {
         get
         {
-            return this._userID;
+            return this._prorertyID;
         }
         set
         {
-            if ((_userID != value))
+            if ((_prorertyID != value))
             {
-                this.OnUserIDChanging(value);
+                this.OnProrertyIDChanging(value);
                 this.SendPropertyChanging();
-                this._userID = value;
-                this.SendPropertyChanged("UserID");
-                this.OnUserIDChanged();
+                this._prorertyID = value;
+                this.SendPropertyChanged("ProrertyID");
+                this.OnProrertyIDChanged();
             }
         }
     }
 
-    [Column(Storage = "_groupID", Name = "group_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never)]
+    [Column(Storage = "_preferenceID", Name = "preference_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
     [DebuggerNonUserCode()]
-    public System.Nullable<int> GroupID
+    public int PreferenceID
     {
         get
         {
-            return this._groupID;
+            return this._preferenceID;
         }
         set
         {
-            if ((_groupID != value))
+            if ((_preferenceID != value))
             {
-                this.OnGroupIDChanging(value);
+                this.OnPreferenceIDChanging(value);
                 this.SendPropertyChanging();
-                this._groupID = value;
-                this.SendPropertyChanged("GroupID");
-                this.OnGroupIDChanged();
+                this._preferenceID = value;
+                this.SendPropertyChanged("PreferenceID");
+                this.OnPreferenceIDChanged();
             }
         }
     }
 
-    [Column(Storage = "_username", Name = "username", DbType = "character varying(50)", AutoSync = AutoSync.Never, CanBeNull = false)]
+    public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+
+    public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void SendPropertyChanging()
+    {
+        System.ComponentModel.PropertyChangingEventHandler h = this.PropertyChanging;
+        if ((h != null))
+        {
+            h(this, emptyChangingEventArgs);
+        }
+    }
+
+    protected virtual void SendPropertyChanged(string propertyName)
+    {
+        System.ComponentModel.PropertyChangedEventHandler h = this.PropertyChanged;
+        if ((h != null))
+        {
+            h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+        }
+    }
+}
+
+[Table(Name = "public.rents")]
+public partial class Rents : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+{
+
+    private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
+
+    private int _rentID;
+
+    private int _carID;
+
+    private int _clientID;
+
+    private System.DateTime _rentStart;
+
+    private System.DateTime _rentStop;
+
+    private int _preferenceID;
+
+    #region Extensibility Method Declarations
+    partial void OnCreated();
+
+    partial void OnRentIDChanged();
+
+    partial void OnRentIDChanging(int value);
+
+    partial void OnCarIDChanged();
+
+    partial void OnCarIDChanging(int value);
+
+    partial void OnClientIDChanged();
+
+    partial void OnClientIDChanging(int value);
+
+    partial void OnRentStartChanged();
+
+    partial void OnRentStartChanging(System.DateTime value);
+
+    partial void OnRentStopChanged();
+
+    partial void OnRentStopChanging(System.DateTime value);
+
+    partial void OnPreferenceIDChanged();
+
+    partial void OnPreferenceIDChanging(int value);
+    #endregion
+
+
+    public Rents()
+    {
+        this.OnCreated();
+    }
+
+    [Column(Storage = "_rentID", Name = "rent_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'rent_id_seq\')")]
     [DebuggerNonUserCode()]
-    public string Username
+    public int RentID
     {
         get
         {
-            return this._username;
+            return this._rentID;
         }
         set
         {
-            if (((_username == value)
-                        == false))
+            if ((_rentID != value))
             {
-                this.OnUsernameChanging(value);
+                this.OnRentIDChanging(value);
                 this.SendPropertyChanging();
-                this._username = value;
-                this.SendPropertyChanged("Username");
-                this.OnUsernameChanged();
+                this._rentID = value;
+                this.SendPropertyChanged("RentID");
+                this.OnRentIDChanged();
             }
         }
     }
 
-    [Column(Storage = "_hash", Name = "hash", DbType = "character varying", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [Column(Storage = "_carID", Name = "car_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
     [DebuggerNonUserCode()]
-    public string Hash
+    public int CarID
     {
         get
         {
-            return this._hash;
+            return this._carID;
         }
         set
         {
-            if (((_hash == value)
-                        == false))
+            if ((_carID != value))
             {
-                this.OnHashChanging(value);
+                this.OnCarIDChanging(value);
                 this.SendPropertyChanging();
-                this._hash = value;
-                this.SendPropertyChanged("Hash");
-                this.OnHashChanged();
+                this._carID = value;
+                this.SendPropertyChanged("CarID");
+                this.OnCarIDChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_clientID", Name = "client_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public int ClientID
+    {
+        get
+        {
+            return this._clientID;
+        }
+        set
+        {
+            if ((_clientID != value))
+            {
+                this.OnClientIDChanging(value);
+                this.SendPropertyChanging();
+                this._clientID = value;
+                this.SendPropertyChanged("ClientID");
+                this.OnClientIDChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_rentStart", Name = "rent_start", DbType = "timestamp without time zone", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public System.DateTime RentStart
+    {
+        get
+        {
+            return this._rentStart;
+        }
+        set
+        {
+            if ((_rentStart != value))
+            {
+                this.OnRentStartChanging(value);
+                this.SendPropertyChanging();
+                this._rentStart = value;
+                this.SendPropertyChanged("RentStart");
+                this.OnRentStartChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_rentStop", Name = "rent_stop", DbType = "timestamp without time zone", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public System.DateTime RentStop
+    {
+        get
+        {
+            return this._rentStop;
+        }
+        set
+        {
+            if ((_rentStop != value))
+            {
+                this.OnRentStopChanging(value);
+                this.SendPropertyChanging();
+                this._rentStop = value;
+                this.SendPropertyChanged("RentStop");
+                this.OnRentStopChanged();
+            }
+        }
+    }
+
+    [Column(Storage = "_preferenceID", Name = "preference_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
+    [DebuggerNonUserCode()]
+    public int PreferenceID
+    {
+        get
+        {
+            return this._preferenceID;
+        }
+        set
+        {
+            if ((_preferenceID != value))
+            {
+                this.OnPreferenceIDChanging(value);
+                this.SendPropertyChanging();
+                this._preferenceID = value;
+                this.SendPropertyChanged("PreferenceID");
+                this.OnPreferenceIDChanged();
             }
         }
     }
