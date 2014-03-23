@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TestDb.Properties
+namespace WindowFormClient.Properties
 {
 
 
