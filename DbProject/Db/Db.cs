@@ -550,6 +550,8 @@ public partial class CarRental
 
         private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
 
+        private int _paymentID;
+
         private int _rentID;
 
         private System.Nullable<int> _penaltyID;
@@ -558,6 +560,10 @@ public partial class CarRental
 
         #region Extensibility Method Declarations
         partial void OnCreated();
+
+        partial void OnPaymentIDChanged();
+
+        partial void OnPaymentIDChanging(int value);
 
         partial void OnRentIDChanged();
 
@@ -578,7 +584,28 @@ public partial class CarRental
             this.OnCreated();
         }
 
-        [Column(Storage = "_rentID", Name = "rent_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'rent_id_seq\')")]
+        [Column(Storage = "_paymentID", Name = "payment_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'payment_id_seq\')")]
+        [DebuggerNonUserCode()]
+        public int PaymentID
+        {
+            get
+            {
+                return this._paymentID;
+            }
+            set
+            {
+                if ((_paymentID != value))
+                {
+                    this.OnPaymentIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._paymentID = value;
+                    this.SendPropertyChanged("PaymentID");
+                    this.OnPaymentIDChanged();
+                }
+            }
+        }
+
+        [Column(Storage = "_rentID", Name = "rent_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
         [DebuggerNonUserCode()]
         public int RentID
         {
@@ -1086,12 +1113,18 @@ public partial class CarRental
 
         private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
 
+        private int _property2carID;
+
         private int _propertyID;
 
         private int _carID;
 
         #region Extensibility Method Declarations
         partial void OnCreated();
+
+        partial void OnProperty2carIDChanged();
+
+        partial void OnProperty2carIDChanging(int value);
 
         partial void OnPropertyIDChanged();
 
@@ -1108,7 +1141,28 @@ public partial class CarRental
             this.OnCreated();
         }
 
-        [Column(Storage = "_propertyID", Name = "property_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'property_id_seq\')")]
+        [Column(Storage = "_property2carID", Name = "property2car_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'property2car_id_seq\')")]
+        [DebuggerNonUserCode()]
+        public int Property2carID
+        {
+            get
+            {
+                return this._property2carID;
+            }
+            set
+            {
+                if ((_property2carID != value))
+                {
+                    this.OnProperty2carIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._property2carID = value;
+                    this.SendPropertyChanged("Property2carID");
+                    this.OnProperty2carIDChanged();
+                }
+            }
+        }
+
+        [Column(Storage = "_propertyID", Name = "property_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
         [DebuggerNonUserCode()]
         public int PropertyID
         {
@@ -1179,12 +1233,18 @@ public partial class CarRental
 
         private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
 
+        private int _property2preferenceID;
+
         private int _prorertyID;
 
         private int _preferenceID;
 
         #region Extensibility Method Declarations
         partial void OnCreated();
+
+        partial void OnProperty2preferenceIDChanged();
+
+        partial void OnProperty2preferenceIDChanging(int value);
 
         partial void OnProrertyIDChanged();
 
@@ -1201,7 +1261,28 @@ public partial class CarRental
             this.OnCreated();
         }
 
-        [Column(Storage = "_prorertyID", Name = "prorerty_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'prorerty_id_seq\')")]
+        [Column(Storage = "_property2preferenceID", Name = "property2preference_id", DbType = "integer(32,0)", IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.Never, CanBeNull = false, Expression = "nextval(\'property2preference_id_seq\')")]
+        [DebuggerNonUserCode()]
+        public int Property2preferenceID
+        {
+            get
+            {
+                return this._property2preferenceID;
+            }
+            set
+            {
+                if ((_property2preferenceID != value))
+                {
+                    this.OnProperty2preferenceIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._property2preferenceID = value;
+                    this.SendPropertyChanged("Property2preferenceID");
+                    this.OnProperty2preferenceIDChanged();
+                }
+            }
+        }
+
+        [Column(Storage = "_prorertyID", Name = "prorerty_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
         [DebuggerNonUserCode()]
         public int ProrertyID
         {
@@ -1466,5 +1547,6 @@ public partial class CarRental
             }
         }
     }
+
 
 }

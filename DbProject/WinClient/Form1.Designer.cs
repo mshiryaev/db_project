@@ -72,14 +72,16 @@
             this.RentStop = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NewClientRequest = new System.Windows.Forms.TabPage();
             this.AddRentBox = new System.Windows.Forms.GroupBox();
-            this.ExpectedCost = new System.Windows.Forms.Label();
-            this.PreferenceId = new System.Windows.Forms.Label();
-            this.MatchedCars = new System.Windows.Forms.ComboBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.AddRent = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
+            this.MatchedCarBox = new System.Windows.Forms.GroupBox();
+            this.NoMatchedCars = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.ExpectedCost = new System.Windows.Forms.Label();
+            this.AddRent = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.MatchedCars = new System.Windows.Forms.ComboBox();
+            this.PreferenceId = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.AddPreferenceBox = new System.Windows.Forms.GroupBox();
             this.CreatePreference = new System.Windows.Forms.Button();
             this.RequestCarProperties = new System.Windows.Forms.ListBox();
             this.RequestMaxDailyCost = new System.Windows.Forms.NumericUpDown();
@@ -104,6 +106,7 @@
             this.label11 = new System.Windows.Forms.Label();
             this.CalculateProfit = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
+            this.AddNewPreference = new System.Windows.Forms.Button();
             this.Tabs.SuspendLayout();
             this.CarPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -117,7 +120,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.RentTable)).BeginInit();
             this.NewClientRequest.SuspendLayout();
             this.AddRentBox.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.MatchedCarBox.SuspendLayout();
+            this.AddPreferenceBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RequestMaxDailyCost)).BeginInit();
             this.ServiceFunctions.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -558,7 +562,7 @@
             // NewClientRequest
             // 
             this.NewClientRequest.Controls.Add(this.AddRentBox);
-            this.NewClientRequest.Controls.Add(this.groupBox3);
+            this.NewClientRequest.Controls.Add(this.AddPreferenceBox);
             this.NewClientRequest.Location = new System.Drawing.Point(4, 22);
             this.NewClientRequest.Name = "NewClientRequest";
             this.NewClientRequest.Padding = new System.Windows.Forms.Padding(3);
@@ -569,103 +573,126 @@
             // 
             // AddRentBox
             // 
-            this.AddRentBox.Controls.Add(this.ExpectedCost);
+            this.AddRentBox.Controls.Add(this.AddNewPreference);
+            this.AddRentBox.Controls.Add(this.MatchedCarBox);
+            this.AddRentBox.Controls.Add(this.NoMatchedCars);
             this.AddRentBox.Controls.Add(this.PreferenceId);
-            this.AddRentBox.Controls.Add(this.MatchedCars);
-            this.AddRentBox.Controls.Add(this.label9);
-            this.AddRentBox.Controls.Add(this.AddRent);
             this.AddRentBox.Controls.Add(this.label8);
-            this.AddRentBox.Controls.Add(this.label7);
             this.AddRentBox.Location = new System.Drawing.Point(438, 7);
             this.AddRentBox.Name = "AddRentBox";
-            this.AddRentBox.Size = new System.Drawing.Size(503, 255);
+            this.AddRentBox.Size = new System.Drawing.Size(503, 338);
             this.AddRentBox.TabIndex = 1;
             this.AddRentBox.TabStop = false;
             this.AddRentBox.Visible = false;
             // 
-            // ExpectedCost
+            // MatchedCarBox
             // 
-            this.ExpectedCost.AutoSize = true;
-            this.ExpectedCost.Location = new System.Drawing.Point(163, 66);
-            this.ExpectedCost.Name = "ExpectedCost";
-            this.ExpectedCost.Size = new System.Drawing.Size(41, 13);
-            this.ExpectedCost.TabIndex = 10;
-            this.ExpectedCost.Text = "label14";
+            this.MatchedCarBox.Controls.Add(this.label7);
+            this.MatchedCarBox.Controls.Add(this.ExpectedCost);
+            this.MatchedCarBox.Controls.Add(this.AddRent);
+            this.MatchedCarBox.Controls.Add(this.label9);
+            this.MatchedCarBox.Controls.Add(this.MatchedCars);
+            this.MatchedCarBox.Location = new System.Drawing.Point(15, 66);
+            this.MatchedCarBox.Name = "MatchedCarBox";
+            this.MatchedCarBox.Size = new System.Drawing.Size(361, 104);
+            this.MatchedCarBox.TabIndex = 11;
+            this.MatchedCarBox.TabStop = false;
+            this.MatchedCarBox.Visible = false;
             // 
-            // PreferenceId
+            // NoMatchedCars
             // 
-            this.PreferenceId.AutoSize = true;
-            this.PreferenceId.Location = new System.Drawing.Point(163, 17);
-            this.PreferenceId.Name = "PreferenceId";
-            this.PreferenceId.Size = new System.Drawing.Size(41, 13);
-            this.PreferenceId.TabIndex = 9;
-            this.PreferenceId.Text = "label13";
-            // 
-            // MatchedCars
-            // 
-            this.MatchedCars.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.MatchedCars.FormattingEnabled = true;
-            this.MatchedCars.Location = new System.Drawing.Point(164, 37);
-            this.MatchedCars.Name = "MatchedCars";
-            this.MatchedCars.Size = new System.Drawing.Size(185, 21);
-            this.MatchedCars.TabIndex = 8;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(1, 66);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(154, 13);
-            this.label9.TabIndex = 7;
-            this.label9.Text = "Предполагаемая стоимость:";
-            // 
-            // AddRent
-            // 
-            this.AddRent.Location = new System.Drawing.Point(40, 93);
-            this.AddRent.Name = "AddRent";
-            this.AddRent.Size = new System.Drawing.Size(115, 23);
-            this.AddRent.TabIndex = 6;
-            this.AddRent.Text = "Оформить сделку";
-            this.AddRent.UseVisualStyleBackColor = true;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(37, 16);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(118, 13);
-            this.label8.TabIndex = 5;
-            this.label8.Text = "Код запроса клиента:";
+            this.NoMatchedCars.AutoSize = true;
+            this.NoMatchedCars.Location = new System.Drawing.Point(194, 17);
+            this.NoMatchedCars.Name = "NoMatchedCars";
+            this.NoMatchedCars.Size = new System.Drawing.Size(160, 13);
+            this.NoMatchedCars.TabIndex = 12;
+            this.NoMatchedCars.Text = "Нет подходящих автомобилей";
+            this.NoMatchedCars.Visible = false;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(17, 41);
+            this.label7.Location = new System.Drawing.Point(23, 16);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(138, 13);
             this.label7.TabIndex = 2;
             this.label7.Text = "Подходящие автомобили:";
             // 
-            // groupBox3
+            // ExpectedCost
             // 
-            this.groupBox3.Controls.Add(this.CreatePreference);
-            this.groupBox3.Controls.Add(this.RequestCarProperties);
-            this.groupBox3.Controls.Add(this.RequestMaxDailyCost);
-            this.groupBox3.Controls.Add(this.RequestStop);
-            this.groupBox3.Controls.Add(this.RequestStart);
-            this.groupBox3.Controls.Add(this.RequestBrand);
-            this.groupBox3.Controls.Add(this.RequestClients);
-            this.groupBox3.Controls.Add(this.label6);
-            this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Location = new System.Drawing.Point(6, 6);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(426, 339);
-            this.groupBox3.TabIndex = 0;
-            this.groupBox3.TabStop = false;
+            this.ExpectedCost.AutoSize = true;
+            this.ExpectedCost.Location = new System.Drawing.Point(169, 41);
+            this.ExpectedCost.Name = "ExpectedCost";
+            this.ExpectedCost.Size = new System.Drawing.Size(41, 13);
+            this.ExpectedCost.TabIndex = 10;
+            this.ExpectedCost.Text = "label14";
+            // 
+            // AddRent
+            // 
+            this.AddRent.Location = new System.Drawing.Point(46, 68);
+            this.AddRent.Name = "AddRent";
+            this.AddRent.Size = new System.Drawing.Size(115, 23);
+            this.AddRent.TabIndex = 6;
+            this.AddRent.Text = "Оформить сделку";
+            this.AddRent.UseVisualStyleBackColor = true;
+            this.AddRent.Click += new System.EventHandler(this.AddRent_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(7, 41);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(154, 13);
+            this.label9.TabIndex = 7;
+            this.label9.Text = "Предполагаемая стоимость:";
+            // 
+            // MatchedCars
+            // 
+            this.MatchedCars.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MatchedCars.FormattingEnabled = true;
+            this.MatchedCars.Location = new System.Drawing.Point(170, 12);
+            this.MatchedCars.Name = "MatchedCars";
+            this.MatchedCars.Size = new System.Drawing.Size(185, 21);
+            this.MatchedCars.TabIndex = 8;
+            // 
+            // PreferenceId
+            // 
+            this.PreferenceId.AutoSize = true;
+            this.PreferenceId.Location = new System.Drawing.Point(138, 17);
+            this.PreferenceId.Name = "PreferenceId";
+            this.PreferenceId.Size = new System.Drawing.Size(41, 13);
+            this.PreferenceId.TabIndex = 9;
+            this.PreferenceId.Text = "label13";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(12, 16);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(118, 13);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "Код запроса клиента:";
+            // 
+            // AddPreferenceBox
+            // 
+            this.AddPreferenceBox.Controls.Add(this.CreatePreference);
+            this.AddPreferenceBox.Controls.Add(this.RequestCarProperties);
+            this.AddPreferenceBox.Controls.Add(this.RequestMaxDailyCost);
+            this.AddPreferenceBox.Controls.Add(this.RequestStop);
+            this.AddPreferenceBox.Controls.Add(this.RequestStart);
+            this.AddPreferenceBox.Controls.Add(this.RequestBrand);
+            this.AddPreferenceBox.Controls.Add(this.RequestClients);
+            this.AddPreferenceBox.Controls.Add(this.label6);
+            this.AddPreferenceBox.Controls.Add(this.label5);
+            this.AddPreferenceBox.Controls.Add(this.label4);
+            this.AddPreferenceBox.Controls.Add(this.label3);
+            this.AddPreferenceBox.Controls.Add(this.label2);
+            this.AddPreferenceBox.Controls.Add(this.label1);
+            this.AddPreferenceBox.Location = new System.Drawing.Point(6, 6);
+            this.AddPreferenceBox.Name = "AddPreferenceBox";
+            this.AddPreferenceBox.Size = new System.Drawing.Size(426, 339);
+            this.AddPreferenceBox.TabIndex = 0;
+            this.AddPreferenceBox.TabStop = false;
             // 
             // CreatePreference
             // 
@@ -703,6 +730,11 @@
             this.RequestMaxDailyCost.Name = "RequestMaxDailyCost";
             this.RequestMaxDailyCost.Size = new System.Drawing.Size(183, 20);
             this.RequestMaxDailyCost.TabIndex = 10;
+            this.RequestMaxDailyCost.Value = new decimal(new int[] {
+            6000,
+            0,
+            0,
+            0});
             // 
             // RequestStop
             // 
@@ -724,6 +756,7 @@
             this.RequestBrand.Name = "RequestBrand";
             this.RequestBrand.Size = new System.Drawing.Size(185, 20);
             this.RequestBrand.TabIndex = 7;
+            this.RequestBrand.Text = "NISSAN";
             // 
             // RequestClients
             // 
@@ -886,15 +919,26 @@
             this.CalculateProfit.TabIndex = 1;
             this.CalculateProfit.Text = "Рассчитать";
             this.CalculateProfit.UseVisualStyleBackColor = true;
+            this.CalculateProfit.Click += new System.EventHandler(this.CalculateProfit_Click);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(253, 21);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(127, 13);
+            this.label10.Size = new System.Drawing.Size(124, 13);
             this.label10.TabIndex = 0;
-            this.label10.Text = "Прибыль за все время:";
+            this.label10.Text = "Выручка за все время:";
+            // 
+            // AddNewPreference
+            // 
+            this.AddNewPreference.Location = new System.Drawing.Point(15, 37);
+            this.AddNewPreference.Name = "AddNewPreference";
+            this.AddNewPreference.Size = new System.Drawing.Size(178, 23);
+            this.AddNewPreference.TabIndex = 13;
+            this.AddNewPreference.Text = "Добавить новое предпочтение";
+            this.AddNewPreference.UseVisualStyleBackColor = true;
+            this.AddNewPreference.Click += new System.EventHandler(this.AddNewPreference_Click);
             // 
             // MainForm
             // 
@@ -921,8 +965,10 @@
             this.NewClientRequest.ResumeLayout(false);
             this.AddRentBox.ResumeLayout(false);
             this.AddRentBox.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
+            this.MatchedCarBox.ResumeLayout(false);
+            this.MatchedCarBox.PerformLayout();
+            this.AddPreferenceBox.ResumeLayout(false);
+            this.AddPreferenceBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RequestMaxDailyCost)).EndInit();
             this.ServiceFunctions.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
@@ -965,7 +1011,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn RentStart;
         private System.Windows.Forms.DataGridViewTextBoxColumn RentStop;
         private System.Windows.Forms.TabPage NewClientRequest;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox AddPreferenceBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button CloseRent;
@@ -1009,6 +1055,9 @@
         private System.Windows.Forms.DateTimePicker RequestStart;
         private System.Windows.Forms.TextBox RequestBrand;
         private System.Windows.Forms.ComboBox RequestClients;
+        private System.Windows.Forms.GroupBox MatchedCarBox;
+        private System.Windows.Forms.Label NoMatchedCars;
+        private System.Windows.Forms.Button AddNewPreference;
 
     }
 }

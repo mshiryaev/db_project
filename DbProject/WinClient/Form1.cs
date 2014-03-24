@@ -17,6 +17,13 @@ namespace TestDb
             Popular
         }
 
+        private enum ClientFilter
+        {
+            All = 0,
+            Frequent,
+            Profitable
+        }
+
         public class CarInfo
         {
             public int Id { get; set; }
@@ -51,10 +58,35 @@ namespace TestDb
 
         }
 
-        private void RefreshClientTable()
+        private void RefreshClientTable(ClientFilter filter = ClientFilter.All)
         {
             ClientTable.Rows.Clear();
-            var clients = DbContext.Clients.Select(c => c).ToList();
+            var clients = new List<Clients>();
+
+            switch (filter)
+            {
+                case ClientFilter.Frequent:
+                    /*clients =
+                        DbContext.Clients.Join(DbContext.Rents, c => c.ClientID, r => r.ClientID,
+                                               (c, r) =>
+                                               new
+                                                   {
+                                                       c.ClientID,
+                                                       c.Name,
+                                                       c.Lastname,
+                                                       c.Middlename,
+                                                       c.PassportData,
+                                                       c.Telephone,
+                                                       c.Discount
+                                                   }).ToList();*/
+                    break;
+                case ClientFilter.Profitable:
+                    break;
+                case ClientFilter.All:
+                    clients = DbContext.Clients.Select(c => c).ToList();
+                    break;
+            }
+
             foreach (var client in clients)
             {
                 ClientTable.Rows.Add(client.ClientID, client.Name, client.Lastname, client.Middlename, client.PassportData, client.Telephone, client.Discount);
@@ -167,6 +199,12 @@ namespace TestDb
             RentTable.Refresh();
         }
 
+        private void ChangeVisibleForNewPreference()
+        {
+            AddRentBox.Visible = false;
+            AddPreferenceBox.Enabled = true;
+        }
+
         // event handlers
 
         private void AddProperty_Click(object sender, EventArgs e)
@@ -269,9 +307,58 @@ namespace TestDb
             DbContext.Preferences.InsertOnSubmit(preference);
             DbContext.SubmitChanges();
 
+            var property2Preference = new List<int>();
+            foreach (var item in RequestCarProperties.SelectedItems)
+            {
+                var p2p = new Property2preference { PreferenceID = preference.PreferenceID, ProrertyID = (item as PropertyInfo).Id };
+                DbContext.Property2preference.InsertOnSubmit(p2p);
+                property2Preference.Add(p2p.ProrertyID);
+            }
+            DbContext.SubmitChanges();
+
             AddRentBox.Visible = true;
-            // TODO: выполняем поиск по критериям либо пишем, что нет совпадений
-            var matchedCars = DbContext.Cars.ToList().Select(car => new CarInfo { Id = car.CarID, Brand = car.Brand }).ToList();
+            AddPreferenceBox.Enabled = false;
+
+            PreferenceId.Text = preference.PreferenceID.ToString(CultureInfo.InvariantCulture);
+
+            var client = DbContext.Clients.FirstOrDefault(c => c.ClientID == preference.ClientID);
+
+            // Поиск автомобилей по предпочтениям
+            var matchedCars = DbContext.Cars.ToList().
+                Where(c => c.Brand == preference.Brand && c.DailyCost <= preference.MaxDailyCost).
+                Select(car => new CarInfo { Id = car.CarID, Brand = car.Brand }).
+                ToList();
+
+            var carToRemove = new List<int>();
+            foreach (var car in matchedCars)
+            {
+                var properties = DbContext.Property2car.Where(p => p.CarID == car.Id).Select(p => p.PropertyID).ToList();
+                foreach (var prop in property2Preference)
+                {
+                    if (!properties.Contains(prop))
+                    {
+                        carToRemove.Add(car.Id);
+                        break;
+                    }
+                }
+            }
+            if (carToRemove.Any())
+                matchedCars = matchedCars.Where(c => !carToRemove.ToArray().Contains(c.Id)).ToList();
+
+            //TODO: поискать по времени
+            // </> Поиск автомобилей по предпочтениям
+
+            if (!matchedCars.Any())
+            {
+                MatchedCarBox.Visible = false;
+                NoMatchedCars.Visible = true;
+            }
+            else
+            {
+                MatchedCarBox.Visible = true;
+                NoMatchedCars.Visible = false;
+            }
+
             MatchedCars.DisplayMember = "Brand";
             MatchedCars.DataSource = matchedCars;
 
@@ -298,6 +385,33 @@ namespace TestDb
         {
             var closeRent = new CloseRent();
             closeRent.ShowDialog();
+        }
+
+        private void AddRent_Click(object sender, EventArgs e)
+        {
+            var rent = new Rents
+                {
+                    CarID = (MatchedCars.SelectedItem as CarInfo).Id,
+                    ClientID = (RequestClients.SelectedItem as ClientInfo).Id,
+                    PreferenceID = Convert.ToInt32(PreferenceId.Text),
+                    RentStart = RequestStart.Value,
+                    RentStop = RequestStop.Value
+                };
+            DbContext.Rents.InsertOnSubmit(rent);
+            DbContext.SubmitChanges();
+            RefreshRentTable();
+            ChangeVisibleForNewPreference();
+        }
+
+        private void AddNewPreference_Click(object sender, EventArgs e)
+        {
+            ChangeVisibleForNewPreference();
+        }
+
+        private void CalculateProfit_Click(object sender, EventArgs e)
+        {
+            var profit = DbContext.Payments.Select(p => p.TotalCost).DefaultIfEmpty(0.0).Sum();
+            ProfitLabel.Text = profit.ToString(CultureInfo.InvariantCulture);
         }
     }
 }
