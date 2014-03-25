@@ -20,14 +20,21 @@ namespace TestDb
         private enum ClientFilter
         {
             All = 0,
-            Frequent,
+            Constant,
             Profitable
+        }
+
+        private enum PenaltyType
+        {
+            Warning = 0,
+            Money
         }
 
         public class CarInfo
         {
             public int Id { get; set; }
             public string Brand { get; set; }
+            public double DailyCost { get; set; }
         }
 
         public class ClientInfo
@@ -65,23 +72,30 @@ namespace TestDb
 
             switch (filter)
             {
-                case ClientFilter.Frequent:
-                    /*clients =
-                        DbContext.Clients.Join(DbContext.Rents, c => c.ClientID, r => r.ClientID,
-                                               (c, r) =>
-                                               new
-                                                   {
-                                                       c.ClientID,
-                                                       c.Name,
-                                                       c.Lastname,
-                                                       c.Middlename,
-                                                       c.PassportData,
-                                                       c.Telephone,
-                                                       c.Discount
-                                                   }).ToList();*/
+                case ClientFilter.Constant:
+                    var constantClientIds =
+                        DbContext.Rents.Select(r => r.ClientID)
+                                 .GroupBy(r => r)
+                                 .Where(r => r.Count() >= 5)
+                                 .Select(c => c.Key).ToList();
+
+                    clients = DbContext.Clients.Where(c => constantClientIds.ToArray().Contains(c.ClientID)).ToList();
                     break;
                 case ClientFilter.Profitable:
-                    break;
+                    var allClients = DbContext.Clients.Select(c => c.ClientID).ToList();
+                    var paymentsByClients = new Dictionary<int, double>();
+                    foreach (var client in allClients)
+                    {
+                        var payment = 0.0;
+                        var paymentCount = DbContext.Payments.Count(p => p.ClientID == client);
+                        if (paymentCount != 0)
+                            payment = DbContext.Payments.Where(p => p.ClientID == client).Sum(p => p.TotalCost);
+                        paymentsByClients.Add(client, payment);
+                    }
+                    var avg = paymentsByClients.Average(r => r.Value);
+                    var profitableClientIds = paymentsByClients.Where(p => p.Value >= avg).Select(p => p.Key).ToArray();
+                    clients = DbContext.Clients.Where(c => profitableClientIds.Contains(c.ClientID)).ToList();
+                    break;    
                 case ClientFilter.All:
                     clients = DbContext.Clients.Select(c => c).ToList();
                     break;
@@ -141,16 +155,16 @@ namespace TestDb
                     break;
                 case CarFilter.Popular:
                     {
-                        //var avg =
-                         //   DbContext.Rents.GroupBy(r => r.CarID)
-                          //           .Select(r => new { Avg = r.Average(rent => rent.) })
-                           //          .Select(r => new { r })
-                            //         .ToList();
-                        var popularCarIds =
-                            DbContext.Rents.GroupBy(r => r.CarID)
-                                     .Select(r => new {CarId = r.Key, Count = r.Count() })
-                                     //.Where(r => r.Count > )
-                                     .ToList();
+                        var allCars = DbContext.Cars.Select(c => c.CarID).ToList();
+                        var rentsForCars = new Dictionary<int, int>();
+                        foreach (var car in allCars)
+                        {
+                            var rentCount = DbContext.Rents.Count(r => r.CarID == car);
+                            rentsForCars.Add(car, rentCount);
+                        }
+                        var avg = rentsForCars.Average(r => r.Value);
+                        var popularCarIds = rentsForCars.Where(r => r.Value >= avg).Select(r => r.Key).ToArray();
+                        cars = DbContext.Cars.Where(c => popularCarIds.Contains(c.CarID)).ToList();
                     }
                     break;
             }
@@ -272,25 +286,25 @@ namespace TestDb
 
         private void CarsInRent_CheckedChanged(object sender, EventArgs e)
         {
-            if (CarsInRent.Enabled)
+            if (CarsInRent.Checked)
                 RefreshCarTable(CarFilter.InRent);
         }
 
         private void CarsNotInRent_CheckedChanged(object sender, EventArgs e)
         {
-            if (CarsNotInRent.Enabled)
+            if (CarsNotInRent.Checked)
                 RefreshCarTable(CarFilter.NotInRent);
         }
 
         private void AllCars_CheckedChanged(object sender, EventArgs e)
         {
-            if (AllCars.Enabled)
-                RefreshCarTable(CarFilter.All);
+            if (AllCars.Checked)
+                RefreshCarTable();
         }
 
         private void PopularCars_CheckedChanged(object sender, EventArgs e)
         {
-            if (PopularCars.Enabled)
+            if (PopularCars.Checked)
                 RefreshCarTable(CarFilter.Popular);
         }
 
@@ -321,12 +335,10 @@ namespace TestDb
 
             PreferenceId.Text = preference.PreferenceID.ToString(CultureInfo.InvariantCulture);
 
-            var client = DbContext.Clients.FirstOrDefault(c => c.ClientID == preference.ClientID);
-
             // Поиск автомобилей по предпочтениям
             var matchedCars = DbContext.Cars.ToList().
                 Where(c => c.Brand == preference.Brand && c.DailyCost <= preference.MaxDailyCost).
-                Select(car => new CarInfo { Id = car.CarID, Brand = car.Brand }).
+                Select(car => new CarInfo { Id = car.CarID, Brand = car.Brand, DailyCost = car.DailyCost}).
                 ToList();
 
             var carToRemove = new List<int>();
@@ -345,7 +357,23 @@ namespace TestDb
             if (carToRemove.Any())
                 matchedCars = matchedCars.Where(c => !carToRemove.ToArray().Contains(c.Id)).ToList();
 
-            //TODO: поискать по времени
+            // По по времени
+            carToRemove.Clear();
+            foreach (var car in matchedCars)
+            {
+                var rents = DbContext.Rents.Where(r => r.CarID == car.Id).ToList();
+                foreach (var rent in rents)
+                {
+                    if (preference.RentStart < rent.RentStop)
+                    {
+                        carToRemove.Add(car.Id);
+                        break;
+                    }
+                }
+            }
+            if (carToRemove.Any())
+                matchedCars = matchedCars.Where(c => !carToRemove.ToArray().Contains(c.Id)).ToList();
+
             // </> Поиск автомобилей по предпочтениям
 
             if (!matchedCars.Any())
@@ -357,11 +385,12 @@ namespace TestDb
             {
                 MatchedCarBox.Visible = true;
                 NoMatchedCars.Visible = false;
+
+                ExpectedCost.Text = (matchedCars[0].DailyCost*((preference.RentStop - preference.RentStart).Days + 1)).ToString(CultureInfo.InvariantCulture);
             }
 
             MatchedCars.DisplayMember = "Brand";
             MatchedCars.DataSource = matchedCars;
-
         }
 
         private void Tabs_SelectedIndexChanged(object sender, EventArgs e)
@@ -410,8 +439,85 @@ namespace TestDb
 
         private void CalculateProfit_Click(object sender, EventArgs e)
         {
-            var profit = DbContext.Payments.Select(p => p.TotalCost).DefaultIfEmpty(0.0).Sum();
+            var profit = 0.0;
+            if (DbContext.Payments.Count() != 0)
+                profit = DbContext.Payments.Select(p => p.TotalCost).Sum();
             ProfitLabel.Text = profit.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public class PenaltyComparer : IEqualityComparer<Penalties>
+        {
+            public bool Equals(Penalties x, Penalties y)
+            {
+                if (x.ClientID == y.ClientID)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public int GetHashCode(Penalties obj)
+            {
+                return obj.ClientID.GetHashCode();
+            }
+        }
+
+        private void CalculateReturnClients_Click(object sender, EventArgs e)
+        {
+            var clienstWithOnePenalty = DbContext.Penalties.
+                                                  Select(p => p.ClientID).
+                                                  GroupBy(p => p).
+                                                  Where(p => p.Count() == 1).ToList();
+            var penatlyWithOneClient = new List<Penalties>();
+            foreach (var clientId in clienstWithOnePenalty)
+            {
+                var rent = DbContext.Penalties.FirstOrDefault(p => p.ClientID == clientId.Key);
+                penatlyWithOneClient.Add(rent);
+            }
+
+            var returnedClientCount = 0;
+            foreach (var penalty in penatlyWithOneClient)
+            {
+                var currentRent = DbContext.Rents.FirstOrDefault(r => r.RentID == penalty.RentID);
+                var findedRentCount =
+                    DbContext.Rents.Count(r => r.RentID != currentRent.RentID && r.ClientID == currentRent.ClientID && r.RentStart >= currentRent.RentStop);
+                if (findedRentCount > 0)
+                    returnedClientCount += 1;
+            }
+            ReturnedClientLabel.Text = returnedClientCount.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void CalculateWarnedClients_Click(object sender, EventArgs e)
+        {
+            var clientCount =
+                DbContext.Penalties.Where(p => p.Type == (int) PenaltyType.Warning)
+                         .Select(p => p.ClientID)
+                         .Distinct()
+                         .ToList()
+                         .Count();
+            WarnedClientLabel.Text = clientCount.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void ConstantClient_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ConstantClient.Checked)
+                RefreshClientTable(ClientFilter.Constant);
+        }
+
+        private void ProfitableClients_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ProfitableClients.Checked)
+                RefreshClientTable(ClientFilter.Profitable);
+        }
+
+        private void MatchedCars_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var preference = DbContext.Preferences.Where(p => p.PreferenceID == Convert.ToInt32(PreferenceId));
+            if (preference.Count() == 1)
+                ExpectedCost.Text = ((MatchedCars.SelectedItem as CarInfo).DailyCost * ((preference.FirstOrDefault().RentStop - preference.FirstOrDefault().RentStart)).Days + 1).ToString(CultureInfo.InvariantCulture);
         }
     }
 }

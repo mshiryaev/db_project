@@ -558,6 +558,8 @@ public partial class CarRental
 
         private double _totalCost;
 
+        private int _clientID;
+
         #region Extensibility Method Declarations
         partial void OnCreated();
 
@@ -576,6 +578,10 @@ public partial class CarRental
         partial void OnTotalCostChanged();
 
         partial void OnTotalCostChanging(double value);
+
+        partial void OnClientIDChanged();
+
+        partial void OnClientIDChanging(int value);
         #endregion
 
 
@@ -668,6 +674,27 @@ public partial class CarRental
             }
         }
 
+        [Column(Storage = "_clientID", Name = "client_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
+        [DebuggerNonUserCode()]
+        public int ClientID
+        {
+            get
+            {
+                return this._clientID;
+            }
+            set
+            {
+                if ((_clientID != value))
+                {
+                    this.OnClientIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._clientID = value;
+                    this.SendPropertyChanged("ClientID");
+                    this.OnClientIDChanged();
+                }
+            }
+        }
+
         public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -703,6 +730,10 @@ public partial class CarRental
 
         private double _sum;
 
+        private int _clientID;
+
+        private int _rentID;
+
         #region Extensibility Method Declarations
         partial void OnCreated();
 
@@ -717,6 +748,14 @@ public partial class CarRental
         partial void OnSumChanged();
 
         partial void OnSumChanging(double value);
+
+        partial void OnClientIDChanged();
+
+        partial void OnClientIDChanging(int value);
+
+        partial void OnRentIDChanged();
+
+        partial void OnRentIDChanging(int value);
         #endregion
 
 
@@ -784,6 +823,48 @@ public partial class CarRental
                     this._sum = value;
                     this.SendPropertyChanged("Sum");
                     this.OnSumChanged();
+                }
+            }
+        }
+
+        [Column(Storage = "_clientID", Name = "client_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
+        [DebuggerNonUserCode()]
+        public int ClientID
+        {
+            get
+            {
+                return this._clientID;
+            }
+            set
+            {
+                if ((_clientID != value))
+                {
+                    this.OnClientIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._clientID = value;
+                    this.SendPropertyChanged("ClientID");
+                    this.OnClientIDChanged();
+                }
+            }
+        }
+
+        [Column(Storage = "_rentID", Name = "rent_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never, CanBeNull = false)]
+        [DebuggerNonUserCode()]
+        public int RentID
+        {
+            get
+            {
+                return this._rentID;
+            }
+            set
+            {
+                if ((_rentID != value))
+                {
+                    this.OnRentIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._rentID = value;
+                    this.SendPropertyChanged("RentID");
+                    this.OnRentIDChanged();
                 }
             }
         }
@@ -1547,6 +1628,5 @@ public partial class CarRental
             }
         }
     }
-
 
 }

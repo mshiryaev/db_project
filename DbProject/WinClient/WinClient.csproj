@@ -85,6 +85,7 @@
     <Compile Include="Common\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Common\DebugTextWriter.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

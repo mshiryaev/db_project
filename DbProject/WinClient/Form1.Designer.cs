@@ -52,7 +52,8 @@
             this.Clients = new System.Windows.Forms.TabPage();
             this.RemoveClient = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.ProfitableClient = new System.Windows.Forms.RadioButton();
+            this.ProfitableClients = new System.Windows.Forms.RadioButton();
+            this.ConstantClient = new System.Windows.Forms.RadioButton();
             this.AddClient = new System.Windows.Forms.Button();
             this.ClientTable = new System.Windows.Forms.DataGridView();
             this.ClientId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -72,13 +73,14 @@
             this.RentStop = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NewClientRequest = new System.Windows.Forms.TabPage();
             this.AddRentBox = new System.Windows.Forms.GroupBox();
+            this.AddNewPreference = new System.Windows.Forms.Button();
             this.MatchedCarBox = new System.Windows.Forms.GroupBox();
-            this.NoMatchedCars = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.ExpectedCost = new System.Windows.Forms.Label();
             this.AddRent = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.MatchedCars = new System.Windows.Forms.ComboBox();
+            this.NoMatchedCars = new System.Windows.Forms.Label();
             this.PreferenceId = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.AddPreferenceBox = new System.Windows.Forms.GroupBox();
@@ -106,7 +108,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.CalculateProfit = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
-            this.AddNewPreference = new System.Windows.Forms.Button();
             this.Tabs.SuspendLayout();
             this.CarPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -382,7 +383,8 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.ProfitableClient);
+            this.groupBox2.Controls.Add(this.ProfitableClients);
+            this.groupBox2.Controls.Add(this.ConstantClient);
             this.groupBox2.Location = new System.Drawing.Point(763, 169);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(169, 124);
@@ -390,15 +392,27 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Фильры";
             // 
-            // ProfitableClient
+            // ProfitableClients
             // 
-            this.ProfitableClient.AutoSize = true;
-            this.ProfitableClient.Location = new System.Drawing.Point(7, 20);
-            this.ProfitableClient.Name = "ProfitableClient";
-            this.ProfitableClient.Size = new System.Drawing.Size(120, 17);
-            this.ProfitableClient.TabIndex = 0;
-            this.ProfitableClient.Text = "доходные клиенты";
-            this.ProfitableClient.UseVisualStyleBackColor = true;
+            this.ProfitableClients.AutoSize = true;
+            this.ProfitableClients.Location = new System.Drawing.Point(7, 43);
+            this.ProfitableClients.Name = "ProfitableClients";
+            this.ProfitableClients.Size = new System.Drawing.Size(120, 17);
+            this.ProfitableClients.TabIndex = 1;
+            this.ProfitableClients.Text = "доходные клиенты";
+            this.ProfitableClients.UseVisualStyleBackColor = true;
+            this.ProfitableClients.CheckedChanged += new System.EventHandler(this.ProfitableClients_CheckedChanged);
+            // 
+            // ConstantClient
+            // 
+            this.ConstantClient.AutoSize = true;
+            this.ConstantClient.Location = new System.Drawing.Point(7, 20);
+            this.ConstantClient.Name = "ConstantClient";
+            this.ConstantClient.Size = new System.Drawing.Size(132, 17);
+            this.ConstantClient.TabIndex = 0;
+            this.ConstantClient.Text = "постоянные клиенты";
+            this.ConstantClient.UseVisualStyleBackColor = true;
+            this.ConstantClient.CheckedChanged += new System.EventHandler(this.ConstantClient_CheckedChanged);
             // 
             // AddClient
             // 
@@ -585,6 +599,16 @@
             this.AddRentBox.TabStop = false;
             this.AddRentBox.Visible = false;
             // 
+            // AddNewPreference
+            // 
+            this.AddNewPreference.Location = new System.Drawing.Point(15, 37);
+            this.AddNewPreference.Name = "AddNewPreference";
+            this.AddNewPreference.Size = new System.Drawing.Size(178, 23);
+            this.AddNewPreference.TabIndex = 13;
+            this.AddNewPreference.Text = "Добавить новое предпочтение";
+            this.AddNewPreference.UseVisualStyleBackColor = true;
+            this.AddNewPreference.Click += new System.EventHandler(this.AddNewPreference_Click);
+            // 
             // MatchedCarBox
             // 
             this.MatchedCarBox.Controls.Add(this.label7);
@@ -598,16 +622,6 @@
             this.MatchedCarBox.TabIndex = 11;
             this.MatchedCarBox.TabStop = false;
             this.MatchedCarBox.Visible = false;
-            // 
-            // NoMatchedCars
-            // 
-            this.NoMatchedCars.AutoSize = true;
-            this.NoMatchedCars.Location = new System.Drawing.Point(194, 17);
-            this.NoMatchedCars.Name = "NoMatchedCars";
-            this.NoMatchedCars.Size = new System.Drawing.Size(160, 13);
-            this.NoMatchedCars.TabIndex = 12;
-            this.NoMatchedCars.Text = "Нет подходящих автомобилей";
-            this.NoMatchedCars.Visible = false;
             // 
             // label7
             // 
@@ -654,6 +668,17 @@
             this.MatchedCars.Name = "MatchedCars";
             this.MatchedCars.Size = new System.Drawing.Size(185, 21);
             this.MatchedCars.TabIndex = 8;
+            this.MatchedCars.SelectedIndexChanged += new System.EventHandler(this.MatchedCars_SelectedIndexChanged);
+            // 
+            // NoMatchedCars
+            // 
+            this.NoMatchedCars.AutoSize = true;
+            this.NoMatchedCars.Location = new System.Drawing.Point(194, 17);
+            this.NoMatchedCars.Name = "NoMatchedCars";
+            this.NoMatchedCars.Size = new System.Drawing.Size(160, 13);
+            this.NoMatchedCars.TabIndex = 12;
+            this.NoMatchedCars.Text = "Нет подходящих автомобилей";
+            this.NoMatchedCars.Visible = false;
             // 
             // PreferenceId
             // 
@@ -883,6 +908,7 @@
             this.CalculateWarnedClients.TabIndex = 5;
             this.CalculateWarnedClients.Text = "Рассчитать";
             this.CalculateWarnedClients.UseVisualStyleBackColor = true;
+            this.CalculateWarnedClients.Click += new System.EventHandler(this.CalculateWarnedClients_Click);
             // 
             // CalculateReturnClients
             // 
@@ -892,6 +918,7 @@
             this.CalculateReturnClients.TabIndex = 4;
             this.CalculateReturnClients.Text = "Рассчитать";
             this.CalculateReturnClients.UseVisualStyleBackColor = true;
+            this.CalculateReturnClients.Click += new System.EventHandler(this.CalculateReturnClients_Click);
             // 
             // label12
             // 
@@ -929,16 +956,6 @@
             this.label10.Size = new System.Drawing.Size(124, 13);
             this.label10.TabIndex = 0;
             this.label10.Text = "Выручка за все время:";
-            // 
-            // AddNewPreference
-            // 
-            this.AddNewPreference.Location = new System.Drawing.Point(15, 37);
-            this.AddNewPreference.Name = "AddNewPreference";
-            this.AddNewPreference.Size = new System.Drawing.Size(178, 23);
-            this.AddNewPreference.TabIndex = 13;
-            this.AddNewPreference.Text = "Добавить новое предпочтение";
-            this.AddNewPreference.UseVisualStyleBackColor = true;
-            this.AddNewPreference.Click += new System.EventHandler(this.AddNewPreference_Click);
             // 
             // MainForm
             // 
@@ -1002,7 +1019,7 @@
         private System.Windows.Forms.RadioButton AllCars;
         private System.Windows.Forms.RadioButton PopularCars;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.RadioButton ProfitableClient;
+        private System.Windows.Forms.RadioButton ConstantClient;
         private System.Windows.Forms.TabPage Rents;
         private System.Windows.Forms.DataGridView RentTable;
         private System.Windows.Forms.DataGridViewTextBoxColumn RentId;
@@ -1058,6 +1075,7 @@
         private System.Windows.Forms.GroupBox MatchedCarBox;
         private System.Windows.Forms.Label NoMatchedCars;
         private System.Windows.Forms.Button AddNewPreference;
+        private System.Windows.Forms.RadioButton ProfitableClients;
 
     }
 }
