@@ -66,11 +66,6 @@
             this.Rents = new System.Windows.Forms.TabPage();
             this.CloseRent = new System.Windows.Forms.Button();
             this.RentTable = new System.Windows.Forms.DataGridView();
-            this.RentId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CarData = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClientData = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RentStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RentStop = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NewClientRequest = new System.Windows.Forms.TabPage();
             this.AddRentBox = new System.Windows.Forms.GroupBox();
             this.AddNewPreference = new System.Windows.Forms.Button();
@@ -108,6 +103,12 @@
             this.label11 = new System.Windows.Forms.Label();
             this.CalculateProfit = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
+            this.RentId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CarData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClientData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RentStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RentStop = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.State = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tabs.SuspendLayout();
             this.CarPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -531,47 +532,13 @@
             this.CarData,
             this.ClientData,
             this.RentStart,
-            this.RentStop});
+            this.RentStop,
+            this.State});
             this.RentTable.Location = new System.Drawing.Point(3, 3);
             this.RentTable.Name = "RentTable";
             this.RentTable.ReadOnly = true;
             this.RentTable.Size = new System.Drawing.Size(754, 290);
             this.RentTable.TabIndex = 3;
-            // 
-            // RentId
-            // 
-            this.RentId.HeaderText = "Идентификатор";
-            this.RentId.Name = "RentId";
-            this.RentId.ReadOnly = true;
-            this.RentId.Width = 112;
-            // 
-            // CarData
-            // 
-            this.CarData.HeaderText = "Автомобиль";
-            this.CarData.Name = "CarData";
-            this.CarData.ReadOnly = true;
-            this.CarData.Width = 94;
-            // 
-            // ClientData
-            // 
-            this.ClientData.HeaderText = "Клиент";
-            this.ClientData.Name = "ClientData";
-            this.ClientData.ReadOnly = true;
-            this.ClientData.Width = 68;
-            // 
-            // RentStart
-            // 
-            this.RentStart.HeaderText = "Дата начала";
-            this.RentStart.Name = "RentStart";
-            this.RentStart.ReadOnly = true;
-            this.RentStart.Width = 88;
-            // 
-            // RentStop
-            // 
-            this.RentStop.HeaderText = "Дата окончания";
-            this.RentStop.Name = "RentStop";
-            this.RentStop.ReadOnly = true;
-            this.RentStop.Width = 105;
             // 
             // NewClientRequest
             // 
@@ -957,6 +924,48 @@
             this.label10.TabIndex = 0;
             this.label10.Text = "Выручка за все время:";
             // 
+            // RentId
+            // 
+            this.RentId.HeaderText = "Идентификатор";
+            this.RentId.Name = "RentId";
+            this.RentId.ReadOnly = true;
+            this.RentId.Width = 112;
+            // 
+            // CarData
+            // 
+            this.CarData.HeaderText = "Автомобиль";
+            this.CarData.Name = "CarData";
+            this.CarData.ReadOnly = true;
+            this.CarData.Width = 94;
+            // 
+            // ClientData
+            // 
+            this.ClientData.HeaderText = "Клиент";
+            this.ClientData.Name = "ClientData";
+            this.ClientData.ReadOnly = true;
+            this.ClientData.Width = 68;
+            // 
+            // RentStart
+            // 
+            this.RentStart.HeaderText = "Дата начала";
+            this.RentStart.Name = "RentStart";
+            this.RentStart.ReadOnly = true;
+            this.RentStart.Width = 96;
+            // 
+            // RentStop
+            // 
+            this.RentStop.HeaderText = "Дата окончания";
+            this.RentStop.Name = "RentStop";
+            this.RentStop.ReadOnly = true;
+            this.RentStop.Width = 105;
+            // 
+            // State
+            // 
+            this.State.HeaderText = "Состояние";
+            this.State.Name = "State";
+            this.State.ReadOnly = true;
+            this.State.Width = 86;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -965,7 +974,6 @@
             this.Controls.Add(this.Tabs);
             this.Name = "MainForm";
             this.Text = "Прокат автомобилей";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.Tabs.ResumeLayout(false);
             this.CarPage.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
@@ -1021,12 +1029,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.RadioButton ConstantClient;
         private System.Windows.Forms.TabPage Rents;
-        private System.Windows.Forms.DataGridView RentTable;
-        private System.Windows.Forms.DataGridViewTextBoxColumn RentId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CarData;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClientData;
-        private System.Windows.Forms.DataGridViewTextBoxColumn RentStart;
-        private System.Windows.Forms.DataGridViewTextBoxColumn RentStop;
+        public System.Windows.Forms.DataGridView RentTable;
         private System.Windows.Forms.TabPage NewClientRequest;
         private System.Windows.Forms.GroupBox AddPreferenceBox;
         private System.Windows.Forms.Label label2;
@@ -1076,6 +1079,12 @@
         private System.Windows.Forms.Label NoMatchedCars;
         private System.Windows.Forms.Button AddNewPreference;
         private System.Windows.Forms.RadioButton ProfitableClients;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RentId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CarData;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClientData;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RentStart;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RentStop;
+        private System.Windows.Forms.DataGridViewTextBoxColumn State;
 
     }
 }

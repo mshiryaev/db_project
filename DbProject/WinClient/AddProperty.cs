@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using TestDb.Common;
 
 namespace TestDb
@@ -12,6 +13,11 @@ namespace TestDb
 
         private void CreateProperty_Click(object sender, EventArgs e)
         {
+            if (PropertyDescription.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Некорректно заполнены поля");
+                return;
+            }
             var property = new Db.Properties {Description = PropertyDescription.Text};
             DbContext.Properties.InsertOnSubmit(property);
             DbContext.SubmitChanges();

@@ -32,6 +32,9 @@
             this.BadState = new System.Windows.Forms.CheckBox();
             this.ReturnDate = new System.Windows.Forms.DateTimePicker();
             this.ReturnCar = new System.Windows.Forms.Button();
+            this.BadStatePenalty = new System.Windows.Forms.NumericUpDown();
+            this.BadStatePenaltyLabel = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.BadStatePenalty)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -52,6 +55,7 @@
             this.BadState.TabIndex = 1;
             this.BadState.Text = "в ненадлежащем виде";
             this.BadState.UseVisualStyleBackColor = true;
+            this.BadState.CheckedChanged += new System.EventHandler(this.BadState_CheckedChanged);
             // 
             // ReturnDate
             // 
@@ -62,7 +66,7 @@
             // 
             // ReturnCar
             // 
-            this.ReturnCar.Location = new System.Drawing.Point(101, 90);
+            this.ReturnCar.Location = new System.Drawing.Point(101, 125);
             this.ReturnCar.Name = "ReturnCar";
             this.ReturnCar.Size = new System.Drawing.Size(75, 23);
             this.ReturnCar.TabIndex = 3;
@@ -70,11 +74,31 @@
             this.ReturnCar.UseVisualStyleBackColor = true;
             this.ReturnCar.Click += new System.EventHandler(this.ReturnCar_Click);
             // 
+            // BadStatePenalty
+            // 
+            this.BadStatePenalty.Location = new System.Drawing.Point(147, 78);
+            this.BadStatePenalty.Name = "BadStatePenalty";
+            this.BadStatePenalty.Size = new System.Drawing.Size(154, 20);
+            this.BadStatePenalty.TabIndex = 4;
+            this.BadStatePenalty.Visible = false;
+            // 
+            // BadStatePenaltyLabel
+            // 
+            this.BadStatePenaltyLabel.AutoSize = true;
+            this.BadStatePenaltyLabel.Location = new System.Drawing.Point(98, 80);
+            this.BadStatePenaltyLabel.Name = "BadStatePenaltyLabel";
+            this.BadStatePenaltyLabel.Size = new System.Drawing.Size(43, 13);
+            this.BadStatePenaltyLabel.TabIndex = 5;
+            this.BadStatePenaltyLabel.Text = "штраф:";
+            this.BadStatePenaltyLabel.Visible = false;
+            // 
             // CloseRent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(311, 126);
+            this.ClientSize = new System.Drawing.Size(318, 158);
+            this.Controls.Add(this.BadStatePenaltyLabel);
+            this.Controls.Add(this.BadStatePenalty);
             this.Controls.Add(this.ReturnCar);
             this.Controls.Add(this.ReturnDate);
             this.Controls.Add(this.BadState);
@@ -82,6 +106,7 @@
             this.Name = "CloseRent";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Возврат автомобиля";
+            ((System.ComponentModel.ISupportInitialize)(this.BadStatePenalty)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -93,5 +118,7 @@
         private System.Windows.Forms.CheckBox BadState;
         private System.Windows.Forms.DateTimePicker ReturnDate;
         private System.Windows.Forms.Button ReturnCar;
+        private System.Windows.Forms.NumericUpDown BadStatePenalty;
+        private System.Windows.Forms.Label BadStatePenaltyLabel;
     }
 }

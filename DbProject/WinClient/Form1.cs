@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Forms;
 using Db;
 using TestDb.Common;
 
@@ -9,47 +10,6 @@ namespace TestDb
 {
     public partial class MainForm : BaseForm
     {
-        private enum CarFilter
-        {
-            All = 0,
-            InRent,
-            NotInRent,
-            Popular
-        }
-
-        private enum ClientFilter
-        {
-            All = 0,
-            Constant,
-            Profitable
-        }
-
-        private enum PenaltyType
-        {
-            Warning = 0,
-            Money
-        }
-
-        public class CarInfo
-        {
-            public int Id { get; set; }
-            public string Brand { get; set; }
-            public double DailyCost { get; set; }
-        }
-
-        public class ClientInfo
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-        }
-
-        public class PropertyInfo
-        {
-            public int Id { get; set; }
-            public string Description { get; set; }
-        }
-
-
         public MainForm()
         {
             InitializeComponent();
@@ -58,11 +18,6 @@ namespace TestDb
             RefreshPropertyTable();
             RefreshClientTable();
             RefreshRentTable();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void RefreshClientTable(ClientFilter filter = ClientFilter.All)
@@ -79,7 +34,8 @@ namespace TestDb
                                  .Where(r => r.Count() >= 5)
                                  .Select(c => c.Key).ToList();
 
-                    clients = DbContext.Clients.Where(c => constantClientIds.ToArray().Contains(c.ClientID)).ToList();
+                    if (constantClientIds.Any())
+                        clients = DbContext.Clients.Where(c => constantClientIds.ToArray().Contains(c.ClientID)).ToList();
                     break;
                 case ClientFilter.Profitable:
                     var allClients = DbContext.Clients.Select(c => c.ClientID).ToList();
@@ -94,7 +50,8 @@ namespace TestDb
                     }
                     var avg = paymentsByClients.Average(r => r.Value);
                     var profitableClientIds = paymentsByClients.Where(p => p.Value >= avg).Select(p => p.Key).ToArray();
-                    clients = DbContext.Clients.Where(c => profitableClientIds.Contains(c.ClientID)).ToList();
+                    if (profitableClientIds.Any())
+                        clients = DbContext.Clients.Where(c => profitableClientIds.Contains(c.ClientID)).ToList();
                     break;    
                 case ClientFilter.All:
                     clients = DbContext.Clients.Select(c => c).ToList();
@@ -164,7 +121,8 @@ namespace TestDb
                         }
                         var avg = rentsForCars.Average(r => r.Value);
                         var popularCarIds = rentsForCars.Where(r => r.Value >= avg).Select(r => r.Key).ToArray();
-                        cars = DbContext.Cars.Where(c => popularCarIds.Contains(c.CarID)).ToList();
+                        if (popularCarIds.Any())
+                            cars = DbContext.Cars.Where(c => popularCarIds.Contains(c.CarID)).ToList();
                     }
                     break;
             }
@@ -194,6 +152,11 @@ namespace TestDb
             var rents = DbContext.Rents.Select(r => r).ToList();
             foreach (var rent in rents)
             {
+                var state = "Открыта";
+                var payment = DbContext.Payments.Count(p => p.RentID == rent.RentID);
+                if (payment == 1)
+                    state = "Закрыта";
+                
                 var client =
                     DbContext.Clients.Where(c => c.ClientID == rent.ClientID)
                              .Select(c => new {c.Name, c.Lastname})
@@ -208,7 +171,8 @@ namespace TestDb
                     RentTable.Rows.Add(rent.RentID, car,
                         client.Lastname + " " + client.Name,
                         rent.RentStart.ToString(CultureInfo.InvariantCulture),
-                        rent.RentStop.ToString(CultureInfo.InvariantCulture));
+                        rent.RentStop.ToString(CultureInfo.InvariantCulture),
+                        state);
             }
             RentTable.Refresh();
         }
@@ -310,6 +274,14 @@ namespace TestDb
 
         private void CreatePreference_Click(object sender, EventArgs e)
         {
+            if (RequestClients.SelectedIndex < 0 ||
+                RequestMaxDailyCost.Value < 0 ||
+                RequestBrand.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Некорректно заполнены поля");
+                return;
+            }
+
             var preference = new Preferences
             {
                 ClientID = (RequestClients.SelectedItem as ClientInfo).Id,
@@ -332,8 +304,6 @@ namespace TestDb
 
             AddRentBox.Visible = true;
             AddPreferenceBox.Enabled = false;
-
-            PreferenceId.Text = preference.PreferenceID.ToString(CultureInfo.InvariantCulture);
 
             // Поиск автомобилей по предпочтениям
             var matchedCars = DbContext.Cars.ToList().
@@ -386,9 +356,10 @@ namespace TestDb
                 MatchedCarBox.Visible = true;
                 NoMatchedCars.Visible = false;
 
-                ExpectedCost.Text = (matchedCars[0].DailyCost*((preference.RentStop - preference.RentStart).Days + 1)).ToString(CultureInfo.InvariantCulture);
+                //ExpectedCost.Text = (matchedCars[0].DailyCost*((preference.RentStop - preference.RentStart).Days + 1)).ToString(CultureInfo.InvariantCulture);
             }
 
+            PreferenceId.Text = preference.PreferenceID.ToString(CultureInfo.InvariantCulture);
             MatchedCars.DisplayMember = "Brand";
             MatchedCars.DataSource = matchedCars;
         }
@@ -412,12 +383,27 @@ namespace TestDb
 
         private void CloseRent_Click(object sender, EventArgs e)
         {
-            var closeRent = new CloseRent();
-            closeRent.ShowDialog();
+            if (RentTable.SelectedRows.Count == 1)
+            {
+                var selectedRent = RentTable.SelectedRows[0];
+                if (selectedRent.Cells["State"].Value.ToString() == "Закрыта")
+                    return;
+
+                var closeRent = new CloseRent(this);
+                closeRent.ShowDialog();
+                RefreshRentTable();
+            }
+            
+
         }
 
         private void AddRent_Click(object sender, EventArgs e)
         {
+            if (MatchedCars.SelectedIndex < 0)
+            {
+                MessageBox.Show("Некорректно заполнены поля");
+                return;
+            }
             var rent = new Rents
                 {
                     CarID = (MatchedCars.SelectedItem as CarInfo).Id,
@@ -515,9 +501,15 @@ namespace TestDb
 
         private void MatchedCars_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var preference = DbContext.Preferences.Where(p => p.PreferenceID == Convert.ToInt32(PreferenceId));
-            if (preference.Count() == 1)
-                ExpectedCost.Text = ((MatchedCars.SelectedItem as CarInfo).DailyCost * ((preference.FirstOrDefault().RentStop - preference.FirstOrDefault().RentStart)).Days + 1).ToString(CultureInfo.InvariantCulture);
+            var preferenceId = Convert.ToInt32(PreferenceId.Text);
+            var preference = DbContext.Preferences.FirstOrDefault(p => p.PreferenceID == preferenceId);
+            var client = DbContext.Clients.FirstOrDefault(c => c.ClientID == preference.ClientID);
+            if (preference != null)
+            {
+                ExpectedCost.Text =
+                    ((1 - client.Discount/100)*(MatchedCars.SelectedItem as CarInfo).DailyCost*
+                     ((preference.RentStop - preference.RentStart).Days + 1)).ToString();
+            }
         }
     }
 }
