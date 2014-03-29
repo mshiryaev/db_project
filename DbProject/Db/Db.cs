@@ -177,6 +177,10 @@ public partial class CarRental
 
         private double _dailyCost;
 
+        private EntitySet<Rents> _rents;
+
+        private EntitySet<Property2car> _property2cAr;
+
         #region Extensibility Method Declarations
         partial void OnCreated();
 
@@ -200,6 +204,8 @@ public partial class CarRental
 
         public Cars()
         {
+            _rents = new EntitySet<Rents>(new Action<Rents>(this.Rents_Attach), new Action<Rents>(this.Rents_Detach));
+            _property2cAr = new EntitySet<Property2car>(new Action<Property2car>(this.Property2Car_Attach), new Action<Property2car>(this.Property2Car_Detach));
             this.OnCreated();
         }
 
@@ -288,6 +294,36 @@ public partial class CarRental
             }
         }
 
+        #region Children
+        [Association(Storage = "_rents", OtherKey = "CarID", ThisKey = "CarID", Name = "rents_car_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Rents> Rents
+        {
+            get
+            {
+                return this._rents;
+            }
+            set
+            {
+                this._rents = value;
+            }
+        }
+
+        [Association(Storage = "_property2cAr", OtherKey = "CarID", ThisKey = "CarID", Name = "property2car_car_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Property2car> Property2Car
+        {
+            get
+            {
+                return this._property2cAr;
+            }
+            set
+            {
+                this._property2cAr = value;
+            }
+        }
+        #endregion
+
         public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -309,6 +345,32 @@ public partial class CarRental
                 h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+
+        #region Attachment handlers
+        private void Rents_Attach(Rents entity)
+        {
+            this.SendPropertyChanging();
+            entity.Cars = this;
+        }
+
+        private void Rents_Detach(Rents entity)
+        {
+            this.SendPropertyChanging();
+            entity.Cars = null;
+        }
+
+        private void Property2Car_Attach(Property2car entity)
+        {
+            this.SendPropertyChanging();
+            entity.Cars = this;
+        }
+
+        private void Property2Car_Detach(Property2car entity)
+        {
+            this.SendPropertyChanging();
+            entity.Cars = null;
+        }
+        #endregion
     }
 
     [Table(Name = "public.clients")]
@@ -330,6 +392,14 @@ public partial class CarRental
         private string _telephone;
 
         private System.Nullable<double> _discount;
+
+        private EntitySet<Preferences> _preferences;
+
+        private EntitySet<Rents> _rents;
+
+        private EntitySet<Penalties> _penalties;
+
+        private EntitySet<Payments> _payments;
 
         #region Extensibility Method Declarations
         partial void OnCreated();
@@ -366,6 +436,10 @@ public partial class CarRental
 
         public Clients()
         {
+            _preferences = new EntitySet<Preferences>(new Action<Preferences>(this.Preferences_Attach), new Action<Preferences>(this.Preferences_Detach));
+            _rents = new EntitySet<Rents>(new Action<Rents>(this.Rents_Attach), new Action<Rents>(this.Rents_Detach));
+            _penalties = new EntitySet<Penalties>(new Action<Penalties>(this.Penalties_Attach), new Action<Penalties>(this.Penalties_Detach));
+            _payments = new EntitySet<Payments>(new Action<Payments>(this.Payments_Attach), new Action<Payments>(this.Payments_Detach));
             this.OnCreated();
         }
 
@@ -521,6 +595,64 @@ public partial class CarRental
             }
         }
 
+        #region Children
+        [Association(Storage = "_preferences", OtherKey = "ClientID", ThisKey = "ClientID", Name = "preferences_client_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Preferences> Preferences
+        {
+            get
+            {
+                return this._preferences;
+            }
+            set
+            {
+                this._preferences = value;
+            }
+        }
+
+        [Association(Storage = "_rents", OtherKey = "ClientID", ThisKey = "ClientID", Name = "rents_client_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Rents> Rents
+        {
+            get
+            {
+                return this._rents;
+            }
+            set
+            {
+                this._rents = value;
+            }
+        }
+
+        [Association(Storage = "_penalties", OtherKey = "ClientID", ThisKey = "ClientID", Name = "penalties_client_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Penalties> Penalties
+        {
+            get
+            {
+                return this._penalties;
+            }
+            set
+            {
+                this._penalties = value;
+            }
+        }
+
+        [Association(Storage = "_payments", OtherKey = "ClientID", ThisKey = "ClientID", Name = "payments_client_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Payments> Payments
+        {
+            get
+            {
+                return this._payments;
+            }
+            set
+            {
+                this._payments = value;
+            }
+        }
+        #endregion
+
         public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -542,6 +674,56 @@ public partial class CarRental
                 h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+
+        #region Attachment handlers
+        private void Preferences_Attach(Preferences entity)
+        {
+            this.SendPropertyChanging();
+            entity.Clients = this;
+        }
+
+        private void Preferences_Detach(Preferences entity)
+        {
+            this.SendPropertyChanging();
+            entity.Clients = null;
+        }
+
+        private void Rents_Attach(Rents entity)
+        {
+            this.SendPropertyChanging();
+            entity.Clients = this;
+        }
+
+        private void Rents_Detach(Rents entity)
+        {
+            this.SendPropertyChanging();
+            entity.Clients = null;
+        }
+
+        private void Penalties_Attach(Penalties entity)
+        {
+            this.SendPropertyChanging();
+            entity.Clients = this;
+        }
+
+        private void Penalties_Detach(Penalties entity)
+        {
+            this.SendPropertyChanging();
+            entity.Clients = null;
+        }
+
+        private void Payments_Attach(Payments entity)
+        {
+            this.SendPropertyChanging();
+            entity.Clients = this;
+        }
+
+        private void Payments_Detach(Payments entity)
+        {
+            this.SendPropertyChanging();
+            entity.Clients = null;
+        }
+        #endregion
     }
 
     [Table(Name = "public.payments")]
@@ -554,11 +736,13 @@ public partial class CarRental
 
         private int _rentID;
 
-        private System.Nullable<int> _penaltyID;
-
         private double _totalCost;
 
         private int _clientID;
+
+        private EntityRef<Rents> _rents = new EntityRef<Rents>();
+
+        private EntityRef<Clients> _clients = new EntityRef<Clients>();
 
         #region Extensibility Method Declarations
         partial void OnCreated();
@@ -570,10 +754,6 @@ public partial class CarRental
         partial void OnRentIDChanged();
 
         partial void OnRentIDChanging(int value);
-
-        partial void OnPenaltyIDChanged();
-
-        partial void OnPenaltyIDChanging(System.Nullable<int> value);
 
         partial void OnTotalCostChanged();
 
@@ -632,27 +812,6 @@ public partial class CarRental
             }
         }
 
-        [Column(Storage = "_penaltyID", Name = "penalty_id", DbType = "integer(32,0)", AutoSync = AutoSync.Never)]
-        [DebuggerNonUserCode()]
-        public System.Nullable<int> PenaltyID
-        {
-            get
-            {
-                return this._penaltyID;
-            }
-            set
-            {
-                if ((_penaltyID != value))
-                {
-                    this.OnPenaltyIDChanging(value);
-                    this.SendPropertyChanging();
-                    this._penaltyID = value;
-                    this.SendPropertyChanged("PenaltyID");
-                    this.OnPenaltyIDChanged();
-                }
-            }
-        }
-
         [Column(Storage = "_totalCost", Name = "total_cost", DbType = "double precision", AutoSync = AutoSync.Never, CanBeNull = false)]
         [DebuggerNonUserCode()]
         public double TotalCost
@@ -695,6 +854,74 @@ public partial class CarRental
             }
         }
 
+        #region Parents
+        [Association(Storage = "_rents", OtherKey = "RentID", ThisKey = "RentID", Name = "payments_rent_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Rents Rents
+        {
+            get
+            {
+                return this._rents.Entity;
+            }
+            set
+            {
+                if (((this._rents.Entity == value)
+                            == false))
+                {
+                    if ((this._rents.Entity != null))
+                    {
+                        Rents previousRents = this._rents.Entity;
+                        this._rents.Entity = null;
+                        previousRents.Payments.Remove(this);
+                    }
+                    this._rents.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payments.Add(this);
+                        _rentID = value.RentID;
+                    }
+                    else
+                    {
+                        _rentID = default(int);
+                    }
+                }
+            }
+        }
+
+        [Association(Storage = "_clients", OtherKey = "ClientID", ThisKey = "ClientID", Name = "payments_client_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Clients Clients
+        {
+            get
+            {
+                return this._clients.Entity;
+            }
+            set
+            {
+                if (((this._clients.Entity == value)
+                            == false))
+                {
+                    if ((this._clients.Entity != null))
+                    {
+                        Clients previousClients = this._clients.Entity;
+                        this._clients.Entity = null;
+                        previousClients.Payments.Remove(this);
+                    }
+                    this._clients.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payments.Add(this);
+                        _clientID = value.ClientID;
+                    }
+                    else
+                    {
+                        _clientID = default(int);
+                    }
+                }
+            }
+        }
+        #endregion
+
         public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -733,6 +960,10 @@ public partial class CarRental
         private int _clientID;
 
         private int _rentID;
+
+        private EntityRef<Clients> _clients = new EntityRef<Clients>();
+
+        private EntityRef<Rents> _rents = new EntityRef<Rents>();
 
         #region Extensibility Method Declarations
         partial void OnCreated();
@@ -869,6 +1100,74 @@ public partial class CarRental
             }
         }
 
+        #region Parents
+        [Association(Storage = "_clients", OtherKey = "ClientID", ThisKey = "ClientID", Name = "penalties_client_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Clients Clients
+        {
+            get
+            {
+                return this._clients.Entity;
+            }
+            set
+            {
+                if (((this._clients.Entity == value)
+                            == false))
+                {
+                    if ((this._clients.Entity != null))
+                    {
+                        Clients previousClients = this._clients.Entity;
+                        this._clients.Entity = null;
+                        previousClients.Penalties.Remove(this);
+                    }
+                    this._clients.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Penalties.Add(this);
+                        _clientID = value.ClientID;
+                    }
+                    else
+                    {
+                        _clientID = default(int);
+                    }
+                }
+            }
+        }
+
+        [Association(Storage = "_rents", OtherKey = "RentID", ThisKey = "RentID", Name = "penalties_rent_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Rents Rents
+        {
+            get
+            {
+                return this._rents.Entity;
+            }
+            set
+            {
+                if (((this._rents.Entity == value)
+                            == false))
+                {
+                    if ((this._rents.Entity != null))
+                    {
+                        Rents previousRents = this._rents.Entity;
+                        this._rents.Entity = null;
+                        previousRents.Penalties.Remove(this);
+                    }
+                    this._rents.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Penalties.Add(this);
+                        _rentID = value.RentID;
+                    }
+                    else
+                    {
+                        _rentID = default(int);
+                    }
+                }
+            }
+        }
+        #endregion
+
         public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -910,6 +1209,12 @@ public partial class CarRental
 
         private double _maxDailyCost;
 
+        private EntitySet<Rents> _rents;
+
+        private EntitySet<Property2preference> _property2pReference;
+
+        private EntityRef<Clients> _clients = new EntityRef<Clients>();
+
         #region Extensibility Method Declarations
         partial void OnCreated();
 
@@ -941,6 +1246,8 @@ public partial class CarRental
 
         public Preferences()
         {
+            _rents = new EntitySet<Rents>(new Action<Rents>(this.Rents_Attach), new Action<Rents>(this.Rents_Detach));
+            _property2pReference = new EntitySet<Property2preference>(new Action<Property2preference>(this.Property2Preference_Attach), new Action<Property2preference>(this.Property2Preference_Detach));
             this.OnCreated();
         }
 
@@ -1071,6 +1378,71 @@ public partial class CarRental
             }
         }
 
+        #region Children
+        [Association(Storage = "_rents", OtherKey = "PreferenceID", ThisKey = "PreferenceID", Name = "rents_preference_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Rents> Rents
+        {
+            get
+            {
+                return this._rents;
+            }
+            set
+            {
+                this._rents = value;
+            }
+        }
+
+        [Association(Storage = "_property2pReference", OtherKey = "PreferenceID", ThisKey = "PreferenceID", Name = "property2preference_preference_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Property2preference> Property2Preference
+        {
+            get
+            {
+                return this._property2pReference;
+            }
+            set
+            {
+                this._property2pReference = value;
+            }
+        }
+        #endregion
+
+        #region Parents
+        [Association(Storage = "_clients", OtherKey = "ClientID", ThisKey = "ClientID", Name = "preferences_client_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Clients Clients
+        {
+            get
+            {
+                return this._clients.Entity;
+            }
+            set
+            {
+                if (((this._clients.Entity == value)
+                            == false))
+                {
+                    if ((this._clients.Entity != null))
+                    {
+                        Clients previousClients = this._clients.Entity;
+                        this._clients.Entity = null;
+                        previousClients.Preferences.Remove(this);
+                    }
+                    this._clients.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Preferences.Add(this);
+                        _clientID = value.ClientID;
+                    }
+                    else
+                    {
+                        _clientID = default(int);
+                    }
+                }
+            }
+        }
+        #endregion
+
         public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -1092,6 +1464,32 @@ public partial class CarRental
                 h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+
+        #region Attachment handlers
+        private void Rents_Attach(Rents entity)
+        {
+            this.SendPropertyChanging();
+            entity.Preferences = this;
+        }
+
+        private void Rents_Detach(Rents entity)
+        {
+            this.SendPropertyChanging();
+            entity.Preferences = null;
+        }
+
+        private void Property2Preference_Attach(Property2preference entity)
+        {
+            this.SendPropertyChanging();
+            entity.Preferences = this;
+        }
+
+        private void Property2Preference_Detach(Property2preference entity)
+        {
+            this.SendPropertyChanging();
+            entity.Preferences = null;
+        }
+        #endregion
     }
 
     [Table(Name = "public.properties")]
@@ -1103,6 +1501,10 @@ public partial class CarRental
         private int _propertyID;
 
         private string _description;
+
+        private EntitySet<Property2car> _property2cAr;
+
+        private EntitySet<Property2preference> _property2pReference;
 
         #region Extensibility Method Declarations
         partial void OnCreated();
@@ -1119,6 +1521,8 @@ public partial class CarRental
 
         public Properties()
         {
+            _property2cAr = new EntitySet<Property2car>(new Action<Property2car>(this.Property2Car_Attach), new Action<Property2car>(this.Property2Car_Detach));
+            _property2pReference = new EntitySet<Property2preference>(new Action<Property2preference>(this.Property2Preference_Attach), new Action<Property2preference>(this.Property2Preference_Detach));
             this.OnCreated();
         }
 
@@ -1165,6 +1569,36 @@ public partial class CarRental
             }
         }
 
+        #region Children
+        [Association(Storage = "_property2cAr", OtherKey = "PropertyID", ThisKey = "PropertyID", Name = "property2car_property_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Property2car> Property2Car
+        {
+            get
+            {
+                return this._property2cAr;
+            }
+            set
+            {
+                this._property2cAr = value;
+            }
+        }
+
+        [Association(Storage = "_property2pReference", OtherKey = "ProrertyID", ThisKey = "PropertyID", Name = "property2preference_prorerty_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Property2preference> Property2Preference
+        {
+            get
+            {
+                return this._property2pReference;
+            }
+            set
+            {
+                this._property2pReference = value;
+            }
+        }
+        #endregion
+
         public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -1186,6 +1620,32 @@ public partial class CarRental
                 h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+
+        #region Attachment handlers
+        private void Property2Car_Attach(Property2car entity)
+        {
+            this.SendPropertyChanging();
+            entity.Properties = this;
+        }
+
+        private void Property2Car_Detach(Property2car entity)
+        {
+            this.SendPropertyChanging();
+            entity.Properties = null;
+        }
+
+        private void Property2Preference_Attach(Property2preference entity)
+        {
+            this.SendPropertyChanging();
+            entity.Properties = this;
+        }
+
+        private void Property2Preference_Detach(Property2preference entity)
+        {
+            this.SendPropertyChanging();
+            entity.Properties = null;
+        }
+        #endregion
     }
 
     [Table(Name = "public.property2car")]
@@ -1199,6 +1659,10 @@ public partial class CarRental
         private int _propertyID;
 
         private int _carID;
+
+        private EntityRef<Properties> _properties = new EntityRef<Properties>();
+
+        private EntityRef<Cars> _cars = new EntityRef<Cars>();
 
         #region Extensibility Method Declarations
         partial void OnCreated();
@@ -1285,6 +1749,74 @@ public partial class CarRental
             }
         }
 
+        #region Parents
+        [Association(Storage = "_properties", OtherKey = "PropertyID", ThisKey = "PropertyID", Name = "property2car_property_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Properties Properties
+        {
+            get
+            {
+                return this._properties.Entity;
+            }
+            set
+            {
+                if (((this._properties.Entity == value)
+                            == false))
+                {
+                    if ((this._properties.Entity != null))
+                    {
+                        Properties previousProperties = this._properties.Entity;
+                        this._properties.Entity = null;
+                        previousProperties.Property2Car.Remove(this);
+                    }
+                    this._properties.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Property2Car.Add(this);
+                        _propertyID = value.PropertyID;
+                    }
+                    else
+                    {
+                        _propertyID = default(int);
+                    }
+                }
+            }
+        }
+
+        [Association(Storage = "_cars", OtherKey = "CarID", ThisKey = "CarID", Name = "property2car_car_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Cars Cars
+        {
+            get
+            {
+                return this._cars.Entity;
+            }
+            set
+            {
+                if (((this._cars.Entity == value)
+                            == false))
+                {
+                    if ((this._cars.Entity != null))
+                    {
+                        Cars previousCars = this._cars.Entity;
+                        this._cars.Entity = null;
+                        previousCars.Property2Car.Remove(this);
+                    }
+                    this._cars.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Property2Car.Add(this);
+                        _carID = value.CarID;
+                    }
+                    else
+                    {
+                        _carID = default(int);
+                    }
+                }
+            }
+        }
+        #endregion
+
         public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -1319,6 +1851,10 @@ public partial class CarRental
         private int _prorertyID;
 
         private int _preferenceID;
+
+        private EntityRef<Properties> _properties = new EntityRef<Properties>();
+
+        private EntityRef<Preferences> _preferences = new EntityRef<Preferences>();
 
         #region Extensibility Method Declarations
         partial void OnCreated();
@@ -1405,6 +1941,74 @@ public partial class CarRental
             }
         }
 
+        #region Parents
+        [Association(Storage = "_properties", OtherKey = "PropertyID", ThisKey = "ProrertyID", Name = "property2preference_prorerty_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Properties Properties
+        {
+            get
+            {
+                return this._properties.Entity;
+            }
+            set
+            {
+                if (((this._properties.Entity == value)
+                            == false))
+                {
+                    if ((this._properties.Entity != null))
+                    {
+                        Properties previousProperties = this._properties.Entity;
+                        this._properties.Entity = null;
+                        previousProperties.Property2Preference.Remove(this);
+                    }
+                    this._properties.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Property2Preference.Add(this);
+                        _prorertyID = value.PropertyID;
+                    }
+                    else
+                    {
+                        _prorertyID = default(int);
+                    }
+                }
+            }
+        }
+
+        [Association(Storage = "_preferences", OtherKey = "PreferenceID", ThisKey = "PreferenceID", Name = "property2preference_preference_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Preferences Preferences
+        {
+            get
+            {
+                return this._preferences.Entity;
+            }
+            set
+            {
+                if (((this._preferences.Entity == value)
+                            == false))
+                {
+                    if ((this._preferences.Entity != null))
+                    {
+                        Preferences previousPreferences = this._preferences.Entity;
+                        this._preferences.Entity = null;
+                        previousPreferences.Property2Preference.Remove(this);
+                    }
+                    this._preferences.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Property2Preference.Add(this);
+                        _preferenceID = value.PreferenceID;
+                    }
+                    else
+                    {
+                        _preferenceID = default(int);
+                    }
+                }
+            }
+        }
+        #endregion
+
         public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -1446,6 +2050,16 @@ public partial class CarRental
 
         private int _preferenceID;
 
+        private EntitySet<Penalties> _penalties;
+
+        private EntitySet<Payments> _payments;
+
+        private EntityRef<Cars> _cars = new EntityRef<Cars>();
+
+        private EntityRef<Clients> _clients = new EntityRef<Clients>();
+
+        private EntityRef<Preferences> _preferences = new EntityRef<Preferences>();
+
         #region Extensibility Method Declarations
         partial void OnCreated();
 
@@ -1477,6 +2091,8 @@ public partial class CarRental
 
         public Rents()
         {
+            _penalties = new EntitySet<Penalties>(new Action<Penalties>(this.Penalties_Attach), new Action<Penalties>(this.Penalties_Detach));
+            _payments = new EntitySet<Payments>(new Action<Payments>(this.Payments_Attach), new Action<Payments>(this.Payments_Detach));
             this.OnCreated();
         }
 
@@ -1606,6 +2222,137 @@ public partial class CarRental
             }
         }
 
+        #region Children
+        [Association(Storage = "_penalties", OtherKey = "RentID", ThisKey = "RentID", Name = "penalties_rent_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Penalties> Penalties
+        {
+            get
+            {
+                return this._penalties;
+            }
+            set
+            {
+                this._penalties = value;
+            }
+        }
+
+        [Association(Storage = "_payments", OtherKey = "RentID", ThisKey = "RentID", Name = "payments_rent_id_fkey")]
+        [DebuggerNonUserCode()]
+        public EntitySet<Payments> Payments
+        {
+            get
+            {
+                return this._payments;
+            }
+            set
+            {
+                this._payments = value;
+            }
+        }
+        #endregion
+
+        #region Parents
+        [Association(Storage = "_cars", OtherKey = "CarID", ThisKey = "CarID", Name = "rents_car_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Cars Cars
+        {
+            get
+            {
+                return this._cars.Entity;
+            }
+            set
+            {
+                if (((this._cars.Entity == value)
+                            == false))
+                {
+                    if ((this._cars.Entity != null))
+                    {
+                        Cars previousCars = this._cars.Entity;
+                        this._cars.Entity = null;
+                        previousCars.Rents.Remove(this);
+                    }
+                    this._cars.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Rents.Add(this);
+                        _carID = value.CarID;
+                    }
+                    else
+                    {
+                        _carID = default(int);
+                    }
+                }
+            }
+        }
+
+        [Association(Storage = "_clients", OtherKey = "ClientID", ThisKey = "ClientID", Name = "rents_client_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Clients Clients
+        {
+            get
+            {
+                return this._clients.Entity;
+            }
+            set
+            {
+                if (((this._clients.Entity == value)
+                            == false))
+                {
+                    if ((this._clients.Entity != null))
+                    {
+                        Clients previousClients = this._clients.Entity;
+                        this._clients.Entity = null;
+                        previousClients.Rents.Remove(this);
+                    }
+                    this._clients.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Rents.Add(this);
+                        _clientID = value.ClientID;
+                    }
+                    else
+                    {
+                        _clientID = default(int);
+                    }
+                }
+            }
+        }
+
+        [Association(Storage = "_preferences", OtherKey = "PreferenceID", ThisKey = "PreferenceID", Name = "rents_preference_id_fkey", IsForeignKey = true)]
+        [DebuggerNonUserCode()]
+        public Preferences Preferences
+        {
+            get
+            {
+                return this._preferences.Entity;
+            }
+            set
+            {
+                if (((this._preferences.Entity == value)
+                            == false))
+                {
+                    if ((this._preferences.Entity != null))
+                    {
+                        Preferences previousPreferences = this._preferences.Entity;
+                        this._preferences.Entity = null;
+                        previousPreferences.Rents.Remove(this);
+                    }
+                    this._preferences.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Rents.Add(this);
+                        _preferenceID = value.PreferenceID;
+                    }
+                    else
+                    {
+                        _preferenceID = default(int);
+                    }
+                }
+            }
+        }
+        #endregion
+
         public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -1627,6 +2374,32 @@ public partial class CarRental
                 h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+
+        #region Attachment handlers
+        private void Penalties_Attach(Penalties entity)
+        {
+            this.SendPropertyChanging();
+            entity.Rents = this;
+        }
+
+        private void Penalties_Detach(Penalties entity)
+        {
+            this.SendPropertyChanging();
+            entity.Rents = null;
+        }
+
+        private void Payments_Attach(Payments entity)
+        {
+            this.SendPropertyChanging();
+            entity.Rents = this;
+        }
+
+        private void Payments_Detach(Payments entity)
+        {
+            this.SendPropertyChanging();
+            entity.Rents = null;
+        }
+        #endregion
     }
 
 }

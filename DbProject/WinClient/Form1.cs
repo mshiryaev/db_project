@@ -18,6 +18,7 @@ namespace TestDb
             RefreshPropertyTable();
             RefreshClientTable();
             RefreshRentTable();
+            RefreshPreferencePage();
         }
 
         private void RefreshClientTable(ClientFilter filter = ClientFilter.All)
@@ -45,10 +46,10 @@ namespace TestDb
                         var payment = 0.0;
                         var paymentCount = DbContext.Payments.Count(p => p.ClientID == client);
                         if (paymentCount != 0)
-                            payment = DbContext.Payments.Where(p => p.ClientID == client).Sum(p => p.TotalCost);
+                            payment = DbContext.Payments.Where(p => p.ClientID == client).Select(p => p.TotalCost).Sum();
                         paymentsByClients.Add(client, payment);
                     }
-                    var avg = paymentsByClients.Average(r => r.Value);
+                    var avg = (paymentsByClients.Any()) ? paymentsByClients.Average(r => r.Value) : 0.0;
                     var profitableClientIds = paymentsByClients.Where(p => p.Value >= avg).Select(p => p.Key).ToArray();
                     if (profitableClientIds.Any())
                         clients = DbContext.Clients.Where(c => profitableClientIds.Contains(c.ClientID)).ToList();
@@ -93,6 +94,8 @@ namespace TestDb
                         var inRentCarIds = new List<int>();
                         if (closedRentIds.Any())
                             inRentCarIds = DbContext.Rents.Where(r => !closedRentIds.Contains(r.RentID)).Select(r => r.CarID).ToList();
+                        else
+                            inRentCarIds = DbContext.Rents.Select(r => r.CarID).ToList();
 
                         switch (filter)
                         {
@@ -119,7 +122,7 @@ namespace TestDb
                             var rentCount = DbContext.Rents.Count(r => r.CarID == car);
                             rentsForCars.Add(car, rentCount);
                         }
-                        var avg = rentsForCars.Average(r => r.Value);
+                        var avg = (rentsForCars.Any()) ? rentsForCars.Average(r => r.Value) : 0.0;
                         var popularCarIds = rentsForCars.Where(r => r.Value >= avg).Select(r => r.Key).ToArray();
                         if (popularCarIds.Any())
                             cars = DbContext.Cars.Where(c => popularCarIds.Contains(c.CarID)).ToList();
@@ -177,6 +180,21 @@ namespace TestDb
             RentTable.Refresh();
         }
 
+        private void RefreshPreferencePage()
+        {
+            var clients = DbContext.Clients.ToList().Select(client => new ClientInfo
+            {
+                Id = client.ClientID,
+                Name = client.Lastname + " " + client.Name + " " + client.Middlename
+            }).ToList();
+            RequestClients.DisplayMember = "Name";
+            RequestClients.DataSource = clients;
+
+            var properties = DbContext.Properties.ToList().Select(property => new PropertyInfo { Id = property.PropertyID, Description = property.Description }).ToList();
+            RequestCarProperties.DisplayMember = "Description";
+            RequestCarProperties.DataSource = properties;
+        }
+
         private void ChangeVisibleForNewPreference()
         {
             AddRentBox.Visible = false;
@@ -190,6 +208,8 @@ namespace TestDb
             var addProperty = new AddProperty();
             addProperty.ShowDialog();
             RefreshPropertyTable();
+            RefreshCarTable();
+            RefreshPreferencePage();
         }
 
         private void RemoveProperty_Click(object sender, EventArgs e)
@@ -204,6 +224,8 @@ namespace TestDb
             }
             DbContext.SubmitChanges();
             RefreshPropertyTable();
+            RefreshCarTable();
+            RefreshPreferencePage();
         }
 
         private void AddClient_Click(object sender, EventArgs e)
@@ -211,6 +233,8 @@ namespace TestDb
             var addClient = new AddClient();
             addClient.ShowDialog();
             RefreshClientTable();
+            RefreshRentTable();
+            RefreshPreferencePage();
         }
 
         private void RemoveClient_Click(object sender, EventArgs e)
@@ -225,6 +249,8 @@ namespace TestDb
             }
             DbContext.SubmitChanges();
             RefreshClientTable();
+            RefreshRentTable();
+            RefreshPreferencePage();
         }
 
         private void AddCar_Click(object sender, EventArgs e)
@@ -232,6 +258,7 @@ namespace TestDb
             var addCar = new AddCar();
             addCar.ShowDialog();
             RefreshCarTable();
+            RefreshRentTable();
         }
 
         private void RemoveCar_Click(object sender, EventArgs e)
@@ -246,6 +273,7 @@ namespace TestDb
             }
             DbContext.SubmitChanges();
             RefreshCarTable();
+            RefreshRentTable();
         }
 
         private void CarsInRent_CheckedChanged(object sender, EventArgs e)
@@ -334,7 +362,8 @@ namespace TestDb
                 var rents = DbContext.Rents.Where(r => r.CarID == car.Id).ToList();
                 foreach (var rent in rents)
                 {
-                    if (preference.RentStart < rent.RentStop)
+                    var payment = DbContext.Payments.FirstOrDefault(p => p.RentID == rent.RentID);
+                    if (preference.RentStart < rent.RentStop && payment == null)
                     {
                         carToRemove.Add(car.Id);
                         break;
@@ -368,16 +397,7 @@ namespace TestDb
         {
             if (Tabs.SelectedIndex == 4)
             {
-                var clients = DbContext.Clients.ToList().Select(client => new ClientInfo
-                    {
-                        Id = client.ClientID, Name = client.Lastname + " " + client.Name + " " + client.Middlename
-                    }).ToList();
-                RequestClients.DisplayMember = "Name";
-                RequestClients.DataSource = clients;
-
-                var properties = DbContext.Properties.ToList().Select(property => new PropertyInfo { Id = property.PropertyID, Description = property.Description }).ToList();
-                RequestCarProperties.DisplayMember = "Description";
-                RequestCarProperties.DataSource = properties;
+                RefreshPreferencePage();
             }
         }
 
@@ -485,6 +505,12 @@ namespace TestDb
                          .ToList()
                          .Count();
             WarnedClientLabel.Text = clientCount.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void AllClients_CheckedChanged(object sender, EventArgs e)
+        {
+            if (AllClients.Checked)
+                RefreshClientTable(ClientFilter.All);
         }
 
         private void ConstantClient_CheckedChanged(object sender, EventArgs e)

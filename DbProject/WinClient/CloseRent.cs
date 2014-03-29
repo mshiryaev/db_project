@@ -58,8 +58,9 @@ namespace TestDb
             }
 
             var penalty = DbContext.Penalties.FirstOrDefault(p => p.RentID == rentId);
-            var totalCost = ((rent.RentStop - rent.RentStart).Days + 1)* car.DailyCost * (1 - client.Discount/100);
-            var payment = new Db.Payments {ClientID = rent.ClientID, PenaltyID = (penalty != null) ? penalty.PenaltyID : -1, RentID = rentId, TotalCost = (double)totalCost};
+            var penaltySum = (penalty != null) ? penalty.Sum : 0.0;
+            var totalCost = ((rent.RentStop - rent.RentStart).Days + 1) * car.DailyCost * (1 - client.Discount / 100) + penaltySum;
+            var payment = new Db.Payments {ClientID = rent.ClientID, RentID = rentId, TotalCost = (double)totalCost};
             DbContext.Payments.InsertOnSubmit(payment);
             DbContext.SubmitChanges();
 

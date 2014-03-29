@@ -52,6 +52,7 @@
             this.Clients = new System.Windows.Forms.TabPage();
             this.RemoveClient = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.AllClients = new System.Windows.Forms.RadioButton();
             this.ProfitableClients = new System.Windows.Forms.RadioButton();
             this.ConstantClient = new System.Windows.Forms.RadioButton();
             this.AddClient = new System.Windows.Forms.Button();
@@ -66,6 +67,12 @@
             this.Rents = new System.Windows.Forms.TabPage();
             this.CloseRent = new System.Windows.Forms.Button();
             this.RentTable = new System.Windows.Forms.DataGridView();
+            this.RentId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CarData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClientData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RentStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RentStop = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.State = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NewClientRequest = new System.Windows.Forms.TabPage();
             this.AddRentBox = new System.Windows.Forms.GroupBox();
             this.AddNewPreference = new System.Windows.Forms.Button();
@@ -103,12 +110,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.CalculateProfit = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
-            this.RentId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CarData = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClientData = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RentStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RentStop = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.State = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tabs.SuspendLayout();
             this.CarPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -384,6 +385,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.AllClients);
             this.groupBox2.Controls.Add(this.ProfitableClients);
             this.groupBox2.Controls.Add(this.ConstantClient);
             this.groupBox2.Location = new System.Drawing.Point(763, 169);
@@ -393,10 +395,23 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Фильры";
             // 
+            // AllClients
+            // 
+            this.AllClients.AutoSize = true;
+            this.AllClients.Checked = true;
+            this.AllClients.Location = new System.Drawing.Point(7, 19);
+            this.AllClients.Name = "AllClients";
+            this.AllClients.Size = new System.Drawing.Size(89, 17);
+            this.AllClients.TabIndex = 2;
+            this.AllClients.TabStop = true;
+            this.AllClients.Text = "все клиенты";
+            this.AllClients.UseVisualStyleBackColor = true;
+            this.AllClients.CheckedChanged += new System.EventHandler(this.AllClients_CheckedChanged);
+            // 
             // ProfitableClients
             // 
             this.ProfitableClients.AutoSize = true;
-            this.ProfitableClients.Location = new System.Drawing.Point(7, 43);
+            this.ProfitableClients.Location = new System.Drawing.Point(7, 64);
             this.ProfitableClients.Name = "ProfitableClients";
             this.ProfitableClients.Size = new System.Drawing.Size(120, 17);
             this.ProfitableClients.TabIndex = 1;
@@ -407,7 +422,7 @@
             // ConstantClient
             // 
             this.ConstantClient.AutoSize = true;
-            this.ConstantClient.Location = new System.Drawing.Point(7, 20);
+            this.ConstantClient.Location = new System.Drawing.Point(7, 41);
             this.ConstantClient.Name = "ConstantClient";
             this.ConstantClient.Size = new System.Drawing.Size(132, 17);
             this.ConstantClient.TabIndex = 0;
@@ -539,6 +554,48 @@
             this.RentTable.ReadOnly = true;
             this.RentTable.Size = new System.Drawing.Size(754, 290);
             this.RentTable.TabIndex = 3;
+            // 
+            // RentId
+            // 
+            this.RentId.HeaderText = "Идентификатор";
+            this.RentId.Name = "RentId";
+            this.RentId.ReadOnly = true;
+            this.RentId.Width = 112;
+            // 
+            // CarData
+            // 
+            this.CarData.HeaderText = "Автомобиль";
+            this.CarData.Name = "CarData";
+            this.CarData.ReadOnly = true;
+            this.CarData.Width = 94;
+            // 
+            // ClientData
+            // 
+            this.ClientData.HeaderText = "Клиент";
+            this.ClientData.Name = "ClientData";
+            this.ClientData.ReadOnly = true;
+            this.ClientData.Width = 68;
+            // 
+            // RentStart
+            // 
+            this.RentStart.HeaderText = "Дата начала";
+            this.RentStart.Name = "RentStart";
+            this.RentStart.ReadOnly = true;
+            this.RentStart.Width = 88;
+            // 
+            // RentStop
+            // 
+            this.RentStop.HeaderText = "Дата окончания";
+            this.RentStop.Name = "RentStop";
+            this.RentStop.ReadOnly = true;
+            this.RentStop.Width = 105;
+            // 
+            // State
+            // 
+            this.State.HeaderText = "Состояние";
+            this.State.Name = "State";
+            this.State.ReadOnly = true;
+            this.State.Width = 86;
             // 
             // NewClientRequest
             // 
@@ -836,7 +893,7 @@
             this.groupBox5.Controls.Add(this.label10);
             this.groupBox5.Location = new System.Drawing.Point(16, 17);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(520, 95);
+            this.groupBox5.Size = new System.Drawing.Size(561, 95);
             this.groupBox5.TabIndex = 1;
             this.groupBox5.TabStop = false;
             // 
@@ -869,7 +926,7 @@
             // 
             // CalculateWarnedClients
             // 
-            this.CalculateWarnedClients.Location = new System.Drawing.Point(425, 64);
+            this.CalculateWarnedClients.Location = new System.Drawing.Point(479, 66);
             this.CalculateWarnedClients.Name = "CalculateWarnedClients";
             this.CalculateWarnedClients.Size = new System.Drawing.Size(75, 23);
             this.CalculateWarnedClients.TabIndex = 5;
@@ -879,7 +936,7 @@
             // 
             // CalculateReturnClients
             // 
-            this.CalculateReturnClients.Location = new System.Drawing.Point(425, 38);
+            this.CalculateReturnClients.Location = new System.Drawing.Point(479, 40);
             this.CalculateReturnClients.Name = "CalculateReturnClients";
             this.CalculateReturnClients.Size = new System.Drawing.Size(75, 23);
             this.CalculateReturnClients.TabIndex = 4;
@@ -907,7 +964,7 @@
             // 
             // CalculateProfit
             // 
-            this.CalculateProfit.Location = new System.Drawing.Point(425, 11);
+            this.CalculateProfit.Location = new System.Drawing.Point(479, 13);
             this.CalculateProfit.Name = "CalculateProfit";
             this.CalculateProfit.Size = new System.Drawing.Size(75, 23);
             this.CalculateProfit.TabIndex = 1;
@@ -923,48 +980,6 @@
             this.label10.Size = new System.Drawing.Size(124, 13);
             this.label10.TabIndex = 0;
             this.label10.Text = "Выручка за все время:";
-            // 
-            // RentId
-            // 
-            this.RentId.HeaderText = "Идентификатор";
-            this.RentId.Name = "RentId";
-            this.RentId.ReadOnly = true;
-            this.RentId.Width = 112;
-            // 
-            // CarData
-            // 
-            this.CarData.HeaderText = "Автомобиль";
-            this.CarData.Name = "CarData";
-            this.CarData.ReadOnly = true;
-            this.CarData.Width = 94;
-            // 
-            // ClientData
-            // 
-            this.ClientData.HeaderText = "Клиент";
-            this.ClientData.Name = "ClientData";
-            this.ClientData.ReadOnly = true;
-            this.ClientData.Width = 68;
-            // 
-            // RentStart
-            // 
-            this.RentStart.HeaderText = "Дата начала";
-            this.RentStart.Name = "RentStart";
-            this.RentStart.ReadOnly = true;
-            this.RentStart.Width = 96;
-            // 
-            // RentStop
-            // 
-            this.RentStop.HeaderText = "Дата окончания";
-            this.RentStop.Name = "RentStop";
-            this.RentStop.ReadOnly = true;
-            this.RentStop.Width = 105;
-            // 
-            // State
-            // 
-            this.State.HeaderText = "Состояние";
-            this.State.Name = "State";
-            this.State.ReadOnly = true;
-            this.State.Width = 86;
             // 
             // MainForm
             // 
@@ -1085,6 +1100,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn RentStart;
         private System.Windows.Forms.DataGridViewTextBoxColumn RentStop;
         private System.Windows.Forms.DataGridViewTextBoxColumn State;
+        private System.Windows.Forms.RadioButton AllClients;
 
     }
 }
